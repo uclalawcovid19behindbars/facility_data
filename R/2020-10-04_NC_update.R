@@ -11,7 +11,7 @@ new_data_rows <- fac_data_old[0,] %>%
   
   # Add HOKE CI
   add_row(
-    Count.ID = generate_new_id(fac_data_old), 
+    Count.ID = generate_new_id(), 
     State = "North Carolina", 
     Name = "HOKE CI", 
     Jurisdiction = "Prison", 
@@ -33,7 +33,7 @@ new_data_rows <- fac_data_old[0,] %>%
   
   # Add CENTRAL PRISON HCF
   add_row(
-    Count.ID = generate_new_id(.), 
+    Count.ID = generate_new_id(), 
     State = "North Carolina", 
     Name = "CENTRAL PRISON HCF", 
     Jurisdiction = "Prison", 
@@ -55,7 +55,7 @@ new_data_rows <- fac_data_old[0,] %>%
   
   # Add ROBESON CRV 
   add_row(
-    Count.ID = generate_new_id(.), 
+    Count.ID = generate_new_id(), 
     State = "North Carolina", 
     Name = "ROBESON CRV", 
     Jurisdiction = NA, 
