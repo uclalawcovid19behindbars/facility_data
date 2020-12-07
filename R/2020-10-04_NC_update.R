@@ -33,7 +33,7 @@ new_data_rows <- fac_data_old[0,] %>%
   
   # Add CENTRAL PRISON HCF
   add_row(
-    Count.ID = generate_new_id(), 
+    Count.ID = generate_new_id() + 1, 
     State = "North Carolina", 
     Name = "CENTRAL PRISON HCF", 
     Jurisdiction = "Prison", 
@@ -55,7 +55,7 @@ new_data_rows <- fac_data_old[0,] %>%
   
   # Add ROBESON CRV 
   add_row(
-    Count.ID = generate_new_id(), 
+    Count.ID = generate_new_id() + 2, 
     State = "North Carolina", 
     Name = "ROBESON CRV", 
     Jurisdiction = NA, 
@@ -87,7 +87,8 @@ new_alt_rows <- new_data_rows %>%
     facility_name_raw = NA, 
     delete = NA
   ) %>% 
-  rename(facility_name_clean = Name)
+  rename(facility_name_clean = Name) %>% 
+  mutate(facility_name_raw = facility_name_clean)
 
 # Add new facilities to alt_data 
 drop_cols <- c("...8", "...9", "...10", "X11")

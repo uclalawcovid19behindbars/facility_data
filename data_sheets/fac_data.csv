@@ -1794,5 +1794,5 @@ Count.ID,State,Name,Jurisdiction,hifld_id,Address,City,Zipcode,Latitude,Longitud
 1680,Wyoming,WYOMING STATE PENITENTIARY,Prison,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,http://corrections.wyo.gov/
 328,NA,STATEWIDE,Federal Prison,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,https://www.bop.gov/coronavirus/
 1868,North Carolina,HOKE CI,Prison,10001797,243 OLD HWY 211,RAEFORD,28376,35.0520132,-79.3412791,HOKE,37093,STATE,502,MINIMUM,NA,NA,https://www.ncdps.gov/adult-corrections/prisons/prison-facilities/hoke-correctional-institution
-1868,North Carolina,CENTRAL PRISON HCF,Prison,10001766,1300 WESTERN BLVD,RALEIGH,27606,35.7775454,-78.6554932,WAKE,37183,STATE,1104,CLOSE,752,NA,https://www.ncdps.gov/Adult-Corrections/Prisons/Prison-Facilities/Central-Prison
-1868,North Carolina,ROBESON CRV,NA,10001794,803 NC HWY 711,LUMBERTON,28360,34.6251147,-79.0757916,ROBESON,37155,STATE,145,MINIMUM,192,NA,https://www.ncdps.gov/adult-corrections/community-corrections/confinement-in-response-to-violation-crv
+1869,North Carolina,CENTRAL PRISON HCF,Prison,10001766,1300 WESTERN BLVD,RALEIGH,27606,35.7775454,-78.6554932,WAKE,37183,STATE,1104,CLOSE,752,NA,https://www.ncdps.gov/Adult-Corrections/Prisons/Prison-Facilities/Central-Prison
+1870,North Carolina,ROBESON CRV,NA,10001794,803 NC HWY 711,LUMBERTON,28360,34.6251147,-79.0757916,ROBESON,37155,STATE,145,MINIMUM,192,NA,https://www.ncdps.gov/adult-corrections/community-corrections/confinement-in-response-to-violation-crv
