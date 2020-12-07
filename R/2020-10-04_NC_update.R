@@ -95,8 +95,8 @@ fac_alt_new <- fac_alt_old %>%
   select(-drop_cols) %>% 
   rbind(new_alt_rows)  
 
-# Create IDs for facilities missing IDs
-
-# Add facilities missing from fac_data 
+# Update files
+write_csv(fac_alt_new, "./data_sheets/fac_spellings.csv")
+write_csv(fac_data_new, "./data_sheets/fac_data.csv")
 
 
