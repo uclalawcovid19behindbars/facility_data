@@ -168,7 +168,7 @@ verify_new_fac_spellings <- function(
   drop <- out %>% 
     filter(exists == FALSE | valid_state == FALSE)
   
-  ndrops <- drop %>% nrow()
+  ndrops <- nrow(drop)
   if (length(ndrops) > 0) {
     for (i in 1:ndrops) {
       if (drop[i,]$exists == FALSE) {
@@ -212,7 +212,7 @@ verify_new_fac_info <- function(
   drop <- out %>% 
     filter(exists == TRUE | valid_state == FALSE) 
   
-  ndrops <- drop %>% nrow()
+  ndrops <- nrow(drop)
   if (length(ndrops) > 0) {
     for (i in 1:ndrops) {
       if (drop[i,]$exists == TRUE) {
@@ -324,25 +324,85 @@ generate_new_fac_id <- function(old_fac_info = NULL, old_fac_spellings = NULL) {
   max_id + 1
 }
 
+# Update fac_info csv  
+# TODO: Decide on consistent column names! 
+update_fac_info <- function(
+  new_fac_info, old_fac_info = NULL, out_csv_path = "./data_sheets/fac_data.csv") {
+  
+  if (is.null(old_fac_info)) {
+    old_fac_info <- behindbarstools::read_fac_info()
+  }
+  
+  out <- old_fac_info %>% 
+    rbind(new_fac_info)
+  
+  write.csv(out, out_csv_path) 
+  
+  message(paste("Adding", nrow(new_fac_info), "facilities.")) 
+  message(paste(out_csv_path, "contains", nrow(out), "facilities."))
+}
+
+# Update fac_spellings csv 
+# TODO: Decide on consistent column names! 
+update_fac_spellings <- function(
+  new_fac_spellings, old_fac_spellings = NULL, out_csv_path = "./data_sheets/fac_spellings.csv") {
+  
+  if (is.null(old_fac_spellings)) {
+    old_fac_info <- behindbarstools::read_fac_spellings()
+  }
+  
+  out <- old_fac_spellings %>% 
+    rbind(new_fac_spellings)
+  
+  write.csv(out, out_csv_path) 
+  
+  message(paste("Adding", nrow(new_fac_info), "alternative spellings")) 
+  message(paste(out_csv_path, "contains", nrow(out), "spellings"))
+}
+
+
+# Load data into environment once 
+OLD_FAC_INFO <- behindbarstools::read_fac_info()
+OLD_FAC_SPELLINGS <- behindbarstools::read_fac_spellings()
+HIFLD_DATA <- behindbarstools::read_hifld_data()
 
 # Process fac_data 
 read_new_fac_info() %>% 
   verify_new_fac_info(
     new_fac_info = ., 
-    old_fac_info = behindbarstools::read_fac_info(), 
-    old_fac_spellings = behindbarstools::read_fac_spellings()
+    old_fac_info = OLD_FAC_INFO, 
+    old_fac_spellings = OLD_FAC_SPELLINGS
   ) %>% 
   populate_new_fac_info(
     ., 
-    hifld_data = behindbarstools::read_hifld_data()
+    hifld_data = HIFLD_DATA
   ) 
-# TODO: update_fac_info()
+
+# TODO: Decide on consistent column names 
+# %>% 
+# update_fac_info(
+#   new_fac_info = ., 
+#   old_fac_info = OLD_FAC_INFO, 
+#   out_csv_path = "./data_sheets/fac_data_dev.csv"
+# )
+
 # TODO: reset_fac_info()
 
 # Process fac_spellings
 read_new_fac_spellings() %>% 
-  verify_new_fac_spellings() 
+  verify_new_fac_spellings(
+    new_fac_spellings = .,  
+    old_fac_info = OLD_FAC_INFO, 
+    old_fac_spellings = OLD_FAC_SPELLINGS
+  ) 
+
+# TODO: Decide on consistent column names 
+# %>% 
+#   update_fac_spellings(
+#     new_fac_spellings = ., 
+#     old_fac_spellings = OLD_FAC_SPELLINGS, 
+#     out_csv_path = "./data_sheets/fac_spellings_dev.csv"
+#   )
 
 # TODO: populate_new_fac_spellings()  
-# TODO: update_new_fac_spellings()
 # TODO: reset_new_fac_spellings() 
