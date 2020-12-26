@@ -1,6 +1,3 @@
-library(tidyverse)
-library(behindbarstools)
-
 rm(list=ls())
 source("R/utilities.R")
 

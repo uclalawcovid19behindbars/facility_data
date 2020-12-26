@@ -1,8 +1,6 @@
 library(tidyverse)
-library(docstring)
-library(googlesheets4)
-library(tidygeocoder)
 library(behindbarstools)
+library(docstring)
 
 read_new_fac_info <- function(google_sheet_url = NULL) {
     #' Read in UCLA facility data updates 
@@ -217,7 +215,7 @@ populate_new_fac_info <- function(new_fac_info = NULL, hifld_data = NULL) {
         new_fac_info <- read_new_fac_info()
     }
     if (is.null(hifld_data)) {
-        hifld_data <- read_hifld_data()
+        hifld_data <- behindbarstools::read_hifld_data()
     }
     
     new_fac_info %>%
@@ -299,8 +297,7 @@ pull_hifld_field <- function(id, field, hifld_data = NULL) {
     return (out)
 }
 
-update_fac_info <- function(
-    new_fac_info, old_fac_info = NULL) {
+update_fac_info <- function(new_fac_info, old_fac_info = NULL) {
     #' Update UCLA facility data 
     #' 
     #' Updates the UCLA facility info sheet by combining the existing sheet with 
@@ -324,8 +321,7 @@ update_fac_info <- function(
     return (out)
 } 
 
-update_fac_spellings <- function(
-    new_fac_spellings, old_fac_spellings = NULL) {
+update_fac_spellings <- function(new_fac_spellings, old_fac_spellings = NULL) {
     #' Update UCLA facility spellings 
     #' 
     #' Updates the UCLA facility alternative spellings sheet by combining the 
