@@ -1,4 +1,5 @@
-![](logo.svg)(https://uclacovidbehindbars.org/)
+[![logo](logo.svg)](https://uclacovidbehindbars.org/)
+
 
 ## Facility Crosswalks 
 
