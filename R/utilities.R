@@ -67,6 +67,27 @@ read_new_fac_spellings <- function(google_sheet_url = NULL) {
         unique()
 }
 
+is_valid_jurisdiction <- function(jurisdiction, missing_as_na = TRUE) {
+    #' Returns TRUE if the given jurisdiction is valid 
+    #' 
+    #' Returns TRUE if the given jurisdiction is in the list of valid 
+    #' jurisdictions (state, county, federal). 
+    #' 
+    #' @param jurisdiction character string of the jurisdiction to check 
+    #' @param missing_as_na logical, whether NA should return NA (vs. FALSE)
+    #' 
+    #' @return logical, TRUE if the given state is a valid jurisdiction 
+    
+    valid_jurisdictions <- c("state", "county", "federal", NA) 
+    
+    return(ifelse(missing_as_na & is.na(jurisdiction), NA, jurisdiction %in% valid_jurisdictions))
+}
+
+# TODO: Add these in once we decide what they should be 
+is_valid_designation <- function(designation, missing_as_na = TRUE) {
+    return (TRUE)  
+}
+
 verify_new_fac_info <- function(
     new_fac_info = NULL, old_fac_info = NULL, old_fac_spellings = NULL) {
     #' Verify UCLA facility data updates 
@@ -91,36 +112,39 @@ verify_new_fac_info <- function(
     if (is.null(old_fac_spellings)) {
         old_fac_spellings <- behindbarstools::read_fac_spellings()
     }
-    
+        
     out <- new_fac_info %>%
         rowwise() %>% 
         mutate(exists_ = behindbarstools::is_fac_name(Name, State, old_fac_info, old_fac_spellings), 
                valid_state_ = behindbarstools::is_valid_state(State), 
-               warning_msg_ = paste0(Name, " (", State, ")"))
+               valid_jurisdiction_ = is_valid_jurisdiction(Jurisdiction, missing_as_na = FALSE), 
+               valid_designation_ = is_valid_designation(Designation),
+               warning_msg_ = paste0(Name, " (", State, ")"), 
+               drop_ = ifelse(exists_ == TRUE 
+                              | valid_state_ == FALSE
+                              | valid_jurisdiction_ == FALSE
+                              | valid_designation_ == FALSE, 
+                              TRUE, FALSE)) 
     
-    drop <- out %>% 
-        filter(exists_ == TRUE | valid_state_ == FALSE) 
-    
-    if (length(nrow(drop)) > 0) {
-        for (i in 1:nrow(drop)) {
-            if (drop[i,]$exists_ == TRUE) {
-                warning(stringr::str_c(
-                    "Dropping because facility already exists: ", drop[i,]$warning_msg_))
-            }
-            if (drop[i,]$valid_state_ == FALSE) {
-                warning(stringr::str_c(
-                    "Dropping because state name is invalid: ", drop[i,]$warning_msg_)) 
-            }
+    ndrops <- nrow(out %>% filter(drop_))
+    if (ndrops > 0) {
+        warning(paste("DROPPING", ndrops, "ROWS."))
+        for(i in 1:nrow(out)) {
+            row <- out[i,]
+            if (row$exists_) {
+                warning(paste("Facility already exists:", row$warning_msg_))}
+            if (!row$valid_state_) {
+                warning(paste("State name is invalid:", row$warning_msg_))}
+            if (!row$valid_jurisdiction_) {
+                warning(paste("Jurisdiction is invalid:", row$warning_msg_))}
+            if (!row$valid_designation_) {
+                warning(paste("Designation is invalid:", row$warning_msg_))}
         }
     }
-    
+
     out %>% 
-        filter(exists_ == FALSE & valid_state_ == TRUE) %>% 
-        select(
-            -exists_, 
-            -valid_state_, 
-            -warning_msg_
-        )
+        filter(!drop_) %>%
+        select(!ends_with("_"))
 }
 
 verify_new_fac_spellings <- function(
@@ -152,31 +176,26 @@ verify_new_fac_spellings <- function(
         rowwise() %>% 
         mutate(exists_ = behindbarstools::is_fac_name(xwalk_name_clean, State, old_fac_info, old_fac_spellings, include_alt = FALSE),
                valid_state_ = behindbarstools::is_valid_state(State), 
-               warning_msg_ = paste0(xwalk_name_clean, " (", State, ")"))
+               warning_msg_ = paste0(xwalk_name_clean, " (", State, ")"), 
+               drop_ = ifelse(exists_ == FALSE 
+                              | valid_state_ == FALSE, 
+                              TRUE, FALSE))
     
-    drop <- out %>% 
-        filter(exists_ == FALSE | valid_state_ == FALSE)
-    
-    if (length(nrow(drop)) > 0) {
-        for (i in 1:nrow(drop)) {
-            if (drop[i,]$exists_ == FALSE) {
-                warning(stringr::str_c(
-                    "Dropping because clean facility name does not exist in fac_info: ", drop[i,]$warning_msg_))
-            }
-            if (drop[i,]$valid_state_ == FALSE) {
-                warning(stringr::str_c(
-                    "Dropping because state name is invalid: ", drop[i,]$warning_msg_)) 
-            }
+    ndrops <- nrow(out %>% filter(drop_))
+    if (ndrops > 0) {
+        warning(paste("DROPPING", ndrops, "ROWS."))
+        for(i in 1:nrow(out)) {
+            row <- out[i,]
+            if (row$exists_) {
+                warning(paste("Clean name does not exist in fac_info:", row$warning_msg_))}
+            if (!row$valid_state_) {
+                warning(paste("State name is invalid:", row$warning_msg_))}
         }
     }
-    
+
     out %>% 
-        filter(exists_ == TRUE & valid_state_ == TRUE) %>% 
-        select(
-            -exists_, 
-            -valid_state_, 
-            -warning_msg_
-        )
+        filter(!drop_) %>%
+        select(!ends_with("_"))
 }
 
 generate_new_fac_id <- function(old_fac_info = NULL, old_fac_spellings = NULL) {
@@ -199,14 +218,17 @@ generate_new_fac_id <- function(old_fac_info = NULL, old_fac_spellings = NULL) {
     max_id <- max(old_fac_info$Facility.ID, old_fac_spellings$Facility.ID, na.rm = TRUE)
     return (max_id + 1) 
 }
-
-populate_new_fac_info <- function(new_fac_info = NULL, hifld_data = NULL) {
+    
+populate_new_fac_info <- function(
+    new_fac_info = NULL, old_fac_info = NULL, old_fac_spellings = NULL, hifld_data = NULL) {
     #' Populate new facility data 
     #' 
     #' Populates missing data in the new facility data updates from the HIFLD 
     #' database and by geocoding addresses. Assigns a new facility ID to each entry. 
     #'
     #' @param new_fac_info data frame, new facility info updates
+    #' @param old_fac_info data frame, existing facility info  
+    #' @param old_fac_spellings data frame, existing facility spellings 
     #' @param hifld_data data frame with HIFLD data 
     #'
     #' @return data frame with missing data populated 
@@ -214,9 +236,20 @@ populate_new_fac_info <- function(new_fac_info = NULL, hifld_data = NULL) {
     if (is.null(new_fac_info)) {
         new_fac_info <- read_new_fac_info()
     }
+    if (is.null(old_fac_info)) {
+        old_fac_info <- behindbarstools::read_fac_info()
+    }
+    if (is.null(old_fac_spellings)) {
+        old_fac_spellings <- behindbarstools::read_fac_spellings()
+    }
     if (is.null(hifld_data)) {
         hifld_data <- behindbarstools::read_hifld_data()
     }
+    
+    # Add source to HIFLD for coalesce 
+    hifld_data <- hifld_data %>% 
+        mutate(population_source = ifelse(is.na(POPULATION), NA, "HIFLD"), 
+               capacity_source = ifelse(is.na(CAPACITY), NA, "HIFLD"))
     
     new_fac_info %>%
         # Populate from HIFLD 
@@ -225,6 +258,9 @@ populate_new_fac_info <- function(new_fac_info = NULL, hifld_data = NULL) {
             Population.Feb = coalesce(
                 Population.Feb, 
                 pull_hifld_field(HIFLD.ID, "POPULATION", hifld_data)),
+            Population.Feb.Source = coalesce(
+                Population.Feb.Source, 
+                pull_hifld_field(HIFLD.ID, "population_source", hifld_data)), 
             Address = coalesce(
                 Address, 
                 pull_hifld_field(HIFLD.ID, "ADDRESS", hifld_data)), 
@@ -246,9 +282,18 @@ populate_new_fac_info <- function(new_fac_info = NULL, hifld_data = NULL) {
             Capacity = coalesce(
                 Capacity, 
                 pull_hifld_field(HIFLD.ID, "CAPACITY", hifld_data)), 
+            Capacity.Source = coalesce(
+                Capacity.Source, 
+                pull_hifld_field(HIFLD.ID, "capacity_source", hifld_data)), 
             Website = coalesce(
                 Website, 
-                pull_hifld_field(HIFLD.ID, "WEBSITE", hifld_data))
+                pull_hifld_field(HIFLD.ID, "WEBSITE", hifld_data)), 
+            Latitude = coalesce(
+                Latitude, 
+                pull_hifld_field(HIFLD.ID, "lat", hifld_data)), 
+            Longitude = coalesce(
+                Longitude, 
+                pull_hifld_field(HIFLD.ID, "lon", hifld_data))
         ) %>% 
         ungroup() %>%
         # Geocode addresses
@@ -268,7 +313,26 @@ populate_new_fac_info <- function(new_fac_info = NULL, hifld_data = NULL) {
         ) %>%
         select(-lat_geo_, -long_geo_) %>%
         # Assign Facility.ID
-        mutate(Facility.ID = generate_new_fac_id() + row_number() - 1)
+        mutate(Facility.ID = generate_new_fac_id(
+            old_fac_info = old_fac_info, 
+            old_fac_spellings = old_fac_spellings) + row_number() - 1)
+}
+
+populate_new_spellings <- function(
+    new_fac_spellings = NULL, old_fac_info = NULL) {
+    
+    if (is.null(new_fac_spellings)) {
+        new_fac_spellings <- read_new_fac_spellings()
+    }
+    if (is.null(old_fac_info)) {
+        old_fac_info <- behindbarstools::read_fac_info()
+    }
+    
+    new_fac_spellings %>% 
+        left_join(old_fac_info,  
+                  by = c("xwalk_name_clean" = "Name", 
+                         "State" = "State")) %>% 
+        select(Facility.ID, State, xwalk_name_raw, xwalk_name_clean, Source)
 }
 
 pull_hifld_field <- function(id, field, hifld_data = NULL) {
@@ -313,7 +377,8 @@ update_fac_info <- function(new_fac_info, old_fac_info = NULL) {
     }
     
     out <- old_fac_info %>% 
-        bind_rows(new_fac_info)
+        bind_rows(new_fac_info) %>% 
+        arrange(State, Name)
     
     message(paste("Adding", nrow(new_fac_info), "facilities.")) 
     message(paste("New facility info crosswalk contains", nrow(out), "facilities."))
@@ -337,7 +402,9 @@ update_fac_spellings <- function(new_fac_spellings, old_fac_spellings = NULL) {
     }
     
     out <- old_fac_spellings %>% 
-        bind_rows(new_fac_spellings)
+        bind_rows(new_fac_spellings) %>% 
+        select(Facility.ID, State, xwalk_name_raw, xwalk_name_clean, Source) %>% 
+        arrange(State, xwalk_name_clean)
     
     message(paste("Adding", nrow(new_fac_spellings), "alternative spellings")) 
     message(paste("New facility spellings crosswalk contains", nrow(out), "spellings"))
