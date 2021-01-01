@@ -320,6 +320,12 @@ populate_new_fac_info <- function(
 
 populate_new_spellings <- function(
     new_fac_spellings = NULL, old_fac_info = NULL) {
+    #' Populate new facility spellings  
+    #' 
+    #' Assigns the facility ID to each spelling based on the facility info data.  
+    #' 
+    #' @param new_fac_spellings data frame, new facility spelling updates
+    #' @param old_fac_info data frame, existing facility info  
     
     if (is.null(new_fac_spellings)) {
         new_fac_spellings <- read_new_fac_spellings()
