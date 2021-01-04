@@ -64,7 +64,7 @@ Data File: fac_data.csv
       * `Transitional Center`: These are prisons which also serve as re-entry centers for convicted individuals who will be released. These facilities often have transitional programs where individuals are technically trained or work in local communities through occupational programs.
       * `Medical Facility`: These are prisons which have significant inpatient and outpatient care services for convicted individuals and typically are correctional hospitals.
       * `Detention Center`: Entities which generally hold individuals who have not been convicted of a crime and are detained or awaiting trial or deportation hearings. These are generally run by state or federal agencies. 
-	    * `Prison Unit`: These are units within prisons. 
+      * `Prison Unit`: These are units within prisons. 
       * `Work Camp`: These are prisons that house individuals who generally work on significant labor projects like farming, land management, and firefighting. 
       * `Aged and Infirmed`: These are prisons that generally house older individuals and individuals with significant chronic diseases.
 * `security`: Security level of the facility. This rating was designated by UCLA staff based on available information. Entities for which no designation could be made were left as NA. 
