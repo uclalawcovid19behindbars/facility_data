@@ -58,7 +58,7 @@ Data File: fac_data.csv
       * `Geographic`: Entities which cover a geographic region and are not a particular facility. Examples include statewide values or parole regions. 
       * `Administrative`: Entities which are staff specific and do not hold correctional residents. Examples include agency headquarters and training academies.
       * `Prison`: Entities which generally hold individuals who have been convicted of a crime and sentenced. These are exclusively run by state or federal agencies.
-      *`Jail`: Entities which generally hold individuals who have not been convicted of a crime and are detained or awaiting trial. These facilities also house individuals who have been convicted of a crime but are serving a short sentence. These are generally run by county governments. 
+      * `Jail`: Entities which generally hold individuals who have not been convicted of a crime and are detained or awaiting trial. These facilities also house individuals who have been convicted of a crime but are serving a short sentence. These are generally run by county governments. 
       * `Hybrid`: Entities which generally hold both individuals convicted of a crime and individuals who have not been convicted of a crime. These are facilities housed in jurisdictions that combine their prison and jail systems, like Hawaii and the District of Columbia. 
       * `Reception Center`: These are prisons which also serve as intake centers for newly convicted individuals. At these facilities, individuals are designated a security level and assigned to a long-term facility. These facilities can also hold their own long-term populations.
       * `Transitional Center`: These are prisons which also serve as re-entry centers for convicted individuals who will be released. These facilities often have transitional programs where individuals are technically trained or work in local communities through occupational programs.
@@ -95,7 +95,7 @@ Data File: fac_data.csv
 * `population`: The population of the facility as close to February 1, 2020 as possible if known. This variable is a combination of population values from the HIFLD dataset and population values gathered by UCLA staff through public records requests. When making this variable, population values gathered by UCLA staff were prioritized over population values from HIFLD if both were available. Staff-gathered population values were prioritized because they are closer to February 2020 than the HIFLD values, which come from the last several years, and they all come from the period of the pandemic. The next update of this dataset will include a new variable that identifies the exact source date for all population values. In the meantime, please consult the source_population variable to find the source of the population values.
 * `hifld_id`: The associated ID for the entity in the HIFLD dataset if one has been identified. 
 * `bjs_id`: The associated ID for the entity in the BJS dataset if one has been identified.
-* `city`: The associated city for the entity from the HIFLD dataset. This value is kept for potential usefulness. 
+* `city`: The associated city for the entity from the HIFLD dataset. 
 * `zipcode`: The associated zipcode for the entity from the HIFLD dataset. 
 * `latitude`: The associated latitude for the entity.
 * `longitude`: The associated longitude for the entity.
