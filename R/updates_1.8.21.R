@@ -27,7 +27,7 @@ fac_data <- fac_data %>%
     select(Facility.ID, everything())
 
 # Sanity check - should be true 
-max(fac_data$Facility.ID) == nrow(fac_data)
+stopifnot(max(fac_data$Facility.ID) == nrow(fac_data))
 
 # Merge IDs into fac_spellings 
 # Federal facilities: merge on cleaned name 
@@ -53,6 +53,9 @@ non_federal <- fac_spellings %>%
 
 full_spellings <- bind_rows(federal, non_federal) %>% 
     arrange(State, Facility.ID)
+
+stopifnot(nrow(full_spellings) == nrow(fac_spellings))
+stopifnot(nrow(full_spellings) == nrow(distinct(full_spellings)))
 
 # Write csv files out 
 write_csv(fac_data, "data/fac_data.csv")
