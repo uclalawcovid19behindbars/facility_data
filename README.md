@@ -1,130 +1,94 @@
-# UCLA Law Covid-19 Behind Bars Data Project
-### An Initiative of the UCLA Prison Law and Policy Program
-### Project Director: Sharon Dolovich, Professor of Law
-### Deputy Director: Aaron Littman, Binder Clinical Teaching Fellow
+[![logo](logo.svg)](https://uclacovidbehindbars.org/)
 
-_Follow us on Twitter @uclaprisondata_
+# Facility Data & Crosswalks 
 
-Data to add? Please email covidbehindbars@law.ucla.edu_		
-
-_Questions about a dataset? Read the Data Dictionary accompanying each dataset which answers FAQs._
-
-## Facility Data Repository
-
-### Background
-
-This repository contains two datasets managed by the UCLA Law Covid-19 Behind Bars Data Project. For a full description of the project and its goals, please visit the ReadMe for the historical-data branch. These datasets contain information on the various entities for which governments report Covid data. If you are using one of these datasets, please read through this ReadMe and its associated data dictionaries. 
-
-### Description of Datasets
-
-* Alternative & Corrected Spellings for Entities in Dataset
-	* Data File Name: `fac_spellings.csv`
-	* Data Dictionary: See below.
-	* Description. This dataset contains the various names agencies use to refer to the entities they report Covid data for alongside a uniform name for that entity. The UCLA team uses this dataset to make the names in our dataset uniform and consistent. 
-
-* Description of Entities in Dataset
-	* Data File Name: `fac_data.csv`
-	* Data Dictionary: See below.
-	* Description: This dataset contains descriptive information on entities in our dataset like whether they are facilities and, if so, the types of individuals housed in them. 
-
-
-### Facility Data Overview
+## Background 
+The [UCLA Law Covid-19 Behind Bars Data Project](https://uclacovidbehindbars.org/) collects and reports facility-level data on COVID-19 in prisons, jails, and other carceral facilities. Our core dataset can be found on GitHub [here](https://github.com/uclalawcovid19behindbars/data). This repository contains the facility datasets and crosswalks used to integrate data from various sources. 
 
 There are very few national datasets on correctional facilities in the U.S. The lack of quality and contemporary descriptive data for correctional facilities poses a major problem for research on corrections, particularly research tracking the spread of Covid in these facilities. 
 
-The UCLA team developed these datasets to uniformly describe the entities reported by various government agencies. The facility spellings dataset is used to formalize the names of entities in our dataset. The facility data dataset contains descriptive information on the entities included in our dataset including capacity, population, and demographic data. It combines multiple national datasets, like the Homeland Infrastructure Foundation-Level Data (HIFLD) Prison Boundaries dataset produced by the Department of Homeland Security and datasets produced by the Bureau of Justice Statistics. Where these datasets have failed to provide information, the UCLA team has independently gathered it using public records requests and investigation. 
+The UCLA team developed these datasets to uniformly describe the entities reported by various government agencies by combining information from various sources. This includes information from national datasets, like the [Homeland Infrastructure Foundation-Level Data (HIFLD) Prison Boundaries dataset](https://hifld-geoplatform.opendata.arcgis.com/datasets/prison-boundaries/data) produced by the Department of Homeland Security and [datasets produced by the Bureau of Justice Statistics](https://www.bjs.gov/index.cfm?ty=dca). We have also filled in gaps in these sources by independently gathering data through public records requests and manual investigation. 
 
-Both of these datasets are evolving as reporting agencies post new entities and new spellings of those entities. As such, the UCLA team continually updates these datasets.
-
-### Data Dictionary
-
-Data File: fac_spellings.csv
-
-* `name_raw`: Names posted by reporting agencies to refer to various entities.
-* `name_clean`: The corrected name for the entity.
-* `state`: State where the entity is located.
-* `jurisdiction`: Jurisdiction of the reporting agency. 
-	* Potential values: Federal, State, County
+**Note**: These files continue to evolve as reporting agencies post new entities and new spellings of those entities. As such, the UCLA team continuously updates these datasets. 
 
 
-Data File: fac_data.csv
+## Directory Structure 
+This repository contains two datasets managed by the UCLA Law Covid-19 Behind Bars Data Project: 
 
-* `name`: Entity name. 
-* `state`: State where the entity is located.
-* `jurisdiction`: Jurisdiction of the reporting agency.
-	* Potential values: `Federal`, `State`, `County`
-* `description`: Entity type. Entities for which no designation could be made were left as NA. 
-	* Potential values:
-      * `Geographic`: Entities which cover a geographic region and are not a particular facility. Examples include statewide values or parole regions. 
-      * `Administrative`: Entities which are staff specific and do not hold correctional residents. Examples include agency headquarters and training academies.
-      * `Prison`: Entities which generally hold individuals who have been convicted of a crime and sentenced. These are exclusively run by state or federal agencies.
-      * `Jail`: Entities which generally hold individuals who have not been convicted of a crime and are detained or awaiting trial. These facilities also house individuals who have been convicted of a crime but are serving a short sentence. These are generally run by county governments. 
-      * `Hybrid`: Entities which generally hold both individuals convicted of a crime and individuals who have not been convicted of a crime. These are facilities housed in jurisdictions that combine their prison and jail systems, like Hawaii and the District of Columbia. 
-      * `Reception Center`: These are prisons which also serve as intake centers for newly convicted individuals. At these facilities, individuals are designated a security level and assigned to a long-term facility. These facilities can also hold their own long-term populations.
-      * `Transitional Center`: These are prisons which also serve as re-entry centers for convicted individuals who will be released. These facilities often have transitional programs where individuals are technically trained or work in local communities through occupational programs.
-      * `Medical Facility`: These are prisons which have significant inpatient and outpatient care services for convicted individuals and typically are correctional hospitals.
-      * `Detention Center`: Entities which generally hold individuals who have not been convicted of a crime and are detained or awaiting trial or deportation hearings. These are generally run by state or federal agencies. 
-      * `Prison Unit`: These are units within prisons. 
-      * `Work Camp`: These are prisons that house individuals who generally work on significant labor projects like farming, land management, and firefighting. 
-      * `Aged and Infirmed`: These are prisons that generally house older individuals and individuals with significant chronic diseases.
-* `security`: Security level of the facility. This rating was designated by UCLA staff based on available information. Entities for which no designation could be made were left as NA. 
-	* Potential values:
-	    * `Max`: Maximum security (including close).
-	    * `Med`: Medium security.
-	    * `Min`: Minimum security.
-	    * `Max/Med`: Maximum to medium security.
-	    * `Max/Min`: Maximum to minimum security.
-	    * `Med/Min`: Medium to minimum security. 
-* `age`: Aged group kept in the entity if known. This rating was designated by UCLA staff based on available information. Entities for which no designation could be made were left as NA. 
-	* Potential values:
-	    * `A`: Adult only facility.
-	    * `J`: Juvenile only facility.
-	    * `B`: Mixed age facility.
-* `gender`: Gender group kept in the entity if known. This rating was designated by UCLA staff based on available information. Entities for which no designation could be made were left as NA. 
-	* Potential values:
-	    * `M`: Male only facility.
-	    * `F`: Female only facility.
-	    * `B`: Mixed gender facility.
-* `diff_operator_dummy`: Dummy variable indicating whether the entity is run by an organization different from the reporting jurisdiction (e.g. a private company or a county government).
-	* Potential values:
-	    * `Different Operator`
-	    * `Unknown`
-* `diff_operator`: The name of the organization operating the entity if the entity is run by an organization different from the reporting jurisdiction. 
+#### Facility Information Dataset
 
-* `capacity`: The capacity of the facility if known. This variable is a combination of reported capacity values from the HIFLD dataset and capacity values gathered by UCLA staff. When making this variable, capacity values gathered by UCLA staff were prioritized over capacity values from HIFLD if both were available. To find the source of capacity values consult the source_capacity dummy variable.
-* `population`: The population of the facility as close to February 1, 2020 as possible if known. This variable is a combination of population values from the HIFLD dataset and population values gathered by UCLA staff through public records requests. When making this variable, population values gathered by UCLA staff were prioritized over population values from HIFLD if both were available. Staff-gathered population values were prioritized because they are closer to February 2020 than the HIFLD values, which come from the last several years, and they all come from the period of the pandemic. The next update of this dataset will include a new variable that identifies the exact source date for all population values. In the meantime, please consult the source_population variable to find the source of the population values.
-* `hifld_id`: The associated ID for the entity in the HIFLD dataset if one has been identified. 
-* `bjs_id`: The associated ID for the entity in the BJS dataset if one has been identified.
-* `city`: The associated city for the entity from the HIFLD dataset. 
-* `zipcode`: The associated zipcode for the entity from the HIFLD dataset. 
-* `latitude`: The associated latitude for the entity.
-* `longitude`: The associated longitude for the entity.
-* `county`: The associated county for the entity from the HIFLD dataset.
-* `county_fips`: The associated county FIPS code for the entity from the HIFLD dataset.
-* `current`: This entity was still being reported on as of December 2020 when these designations were made. Entities that were not current were facilities formerly reported by a jurisdiction and did not receive designations.
-	* Potential values:
-	    * `Current`
-	    * `Previous`
-* `source_population`: The source of the population value in population.
-	* Potential values:
-	    * `Public Records`
-	    * `HIFLD`
-* `source_capacity`: The source of the capacity value in capacity.
-	* Potential values:
-	    * `Public Records`
-	    * `HIFLD`
+* Data File: `fac_data.csv`
+* Description: This dataset contains detailed descriptive information on each entity in our dataset (e.g. type of entity, capacity, population, geographic information, etc.). Each row represents a unique entity. 
 
-### Citations 
+#### Facility Spellings Crosswalk 
+
+* Data File: `fac_data.csv`
+* Description: This crosswalk maps alternative spellings of a given entity to the cleaned name in the Facility Information Dataset. Each row represents a unique spelling of a given entity, as reported by an agency that we collect data from. 
+
+
+## Data Dictionary
+
+Note that we use facility and entity interchangably here. While the majority of the rows in these datasets are facilities (e.g. jails or prisons), several rows are geographic entities because an agency reports data at that level. 
+
+#### Facility Information Dataset
+
+| Variable | Description |  |
+|-|-|-|
+| `Facility.ID` | Integer ID that uniquely identifies every facility  |  |
+| `Name` | Cleaned name for the facility  |  |
+| `State` | State where the facility is located |  |
+| `Jurisdiction` | Jurisdiction of the reporting agency. Potential values: `state`, `county`, `federal`.  |  |
+| `Description` | Entity type, more detailed descriptions below. Potential values: `Geographic`, `Administrative`, `Prison`, `Jail`, `Hybrid`, `Reception Center`, `Transitional Center`, `Medical Facility`, `Detention Center`, `Prison Unit`, `Work Camp`, `Aged and Infirmed`.  |  |
+| `Security` | Security level of the facility, designated by UCLA staff based on available information. Potential values: `Max`, `Med`, `Min`, `Max/Med`, `Max/Min`, `Med/Min`.  |  |
+| `Age` | Age group kept in the entity if known, designated by UCLA staff based on available information. Potential values: `Adult`, `Juvenile`, `Mixed`.   |  |
+| `Gender` | Gender group kept in the entity if known, designated by UCLA staff based on available information. Potential values: `Female`, `Male`, `Mixed`.  |  |
+| `Is.Different.Operator` | Binary indicator for whether the entity is run by an organization different from the reporting jurisdiction (e.g. a private company or a county government).  |  |
+| `Different.Operator` | Name of the organization operating the entity if run by an organization different from the reporting jurisdiction. |  |
+| `Population` | Population of the facility as close to February 1, 2020 as possible. This variable is a combination of [HIFLD values](https://hifld-geoplatform.opendata.arcgis.com/datasets/prison-boundaries/data) and data gathered by UCLA staff through public records requests. Population values gathered by UCLA staff were prioritized over data from HIFLD if both were available. Staff-gathered population values were prioritized because they are closer to February 2020 than the HIFLD values, which are from the last several years. |  |
+| `Capacity` | Capacity of the facility if known. This variable is a combination of [HIFLD values](https://hifld-geoplatform.opendata.arcgis.com/datasets/prison-boundaries/data) and data gathered by UCLA staff. Capacity values gathered by UCLA staff were prioritized over data from HIFLD if both were available.  |  |
+| `HIFLD.ID` | Facility's corresponding [Homeland Infrastructure Foundation-Level Data](https://hifld-geoplatform.opendata.arcgis.com/datasets/prison-boundaries/data) ID |  |
+| `BJS.ID` | Facility's corresponding [Bureau of Justice Statistics](https://www.bjs.gov/index.cfm?ty=dca) ID |  |
+| `Source.Population` | Population source. Potential values: `HIFLD`, `Public Records`.  |  |
+| `Source.Capacity` | Capacity source. Potential values: `HIFLD`, `Public Records`.  |  |
+
+Additional geographic fields: `Zipcode`, `City`, `County`, `Latitude`, `Longitude`, `County.FIPS`.
+
+Descriptions of the entity types in the `Description` field are as follows: 
+
+* `Geographic`: Cover a geographic region and are not a particular facility (e.g. statewide values, parole regions) 
+* `Administrative`: Staff specific and do not hold correctional residents (e.g. agency headquarters, training academies)
+* `Prison`: Generally hold individuals who have been convicted of a crime and sentenced. These are exclusively run by state or federal agencies
+* `Jail`: Generally hold individuals who have not been convicted of a crime and are detained or awaiting trial. These facilities also house individuals who have been convicted of a crime but are serving a short sentence. These are generally run by county governments.
+* `Hybrid`: Generally hold both individuals convicted of a crime and individuals who have not been convicted of a crime. These are facilities housed in jurisdictions that combine their prison and jail systems, like Hawaii and DC. 
+* `Reception Center`: Prisons which also serve as intake centers for newly convicted individuals. At these facilities, individuals are designated a security level and assigned to a long-term facility. These facilities can also hold their own long-term populations.
+* `Transitional Center`: Prisons which also serve as re-entry centers for convicted individuals who will be released. These facilities often have transitional programs where individuals are technically trained or work in local communities through occupational programs.
+* `Medical Facility`: Prisons which have significant inpatient and outpatient care services for convicted individuals and typically are correctional hospitals.
+* `Detention Center`: Generally hold individuals who have not been convicted of a crime and are detained or awaiting trial or deportation hearings. These are generally run by state or federal agencies.
+* `Prison Unit`: Units within prisons 
+* `Work Camp`: Prisons that house individuals who generally work on significant labor projects like farming, land management, and firefighting 
+* `Aged and Infirmed`: Prisons that generally house older individuals and individuals with significant chronic diseases 
+
+#### Facility Spellings Crosswalk 
+
+| Variable              | Description                                                                         |
+|-----------------------|-------------------------------------------------------------------------------------|
+| `Facility.ID`         | Integer ID that uniquely identifies every facility                                  |
+| `facility_name_raw`   | Alternative spelling for the facility                                               |
+| `facility_name_clean` | Cleaned name for the facility                                                       |
+| `State`               | State where the facility is located                                                 |
+| `Is.Federal`          | Binary indicator for whether the entity falls under federal jurisdiction            |
+
+
+## Citations
 
 Citations for academic publications and research reports:
 
-    Sharon Dolovich,
-     Aaron Littman, Kalind Parish, Grace DiLaura, Chase Hommeyer,  Michael Everett, Hope Johnson, Neal Marquez, and Erika Tykagi. UCLA Law Covid-19 Behind Bars Data Project: Jail/Prison Confirmed Cases Dataset [date you downloaded the data]. UCLA Law, 2020, https://uclacovidbehindbars.org/.
- 
+> Sharon Dolovich, Aaron Littman, Kalind Parish, Grace DiLaura, Chase Hommeyer,  Michael Everett, Hope Johnson, Neal Marquez, and Erika Tyagi. UCLA Law Covid-19 Behind Bars Data Project: Jail/Prison Confirmed Cases Dataset [date you downloaded the data]. UCLA Law, 2020, https://uclacovidbehindbars.org/.
+
 Citations for media outlets, policy briefs, and online resources:
 
-    UCLA Law Covid-19 Behind Bars Data Project, https://uclacovidbehindbars.org/.
+> UCLA Law Covid-19 Behind Bars Data Project, https://uclacovidbehindbars.org/.
 
-### Data licensing
 
-Our data is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0/). That means that you must give appropriate credit, provide a link to the license, and indicate if changes were made. You may not use our work for commercial purposes, which means anything primarily intended for or directed toward commercial advantage or monetary compensation.
+## License 
+Our data is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0/). That means that you must give appropriate credit, provide a link to the license, and indicate if changes were made. You may not use our work for commercial purposes, which means anything primarily intended for or directed toward commercial advantage or monetary compensation. 
