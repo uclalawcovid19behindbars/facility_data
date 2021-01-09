@@ -17,56 +17,45 @@ This repository contains two datasets managed by the UCLA Law Covid-19 Behind Ba
 
 #### Facility Information Dataset
 
-* Data File: `fac_data.csv`
+* Data File: `data/fac_data.csv`
 * Description: This dataset contains detailed descriptive information on each entity in our dataset (e.g. type of entity, capacity, population, geographic information, etc.). Each row represents a unique entity. 
 
 #### Facility Spellings Crosswalk 
 
-* Data File: `fac_data.csv`
+* Data File: `data/fac_spellings.csv`
 * Description: This crosswalk maps alternative spellings of a given entity to the cleaned name in the Facility Information Dataset. Each row represents a unique spelling of a given entity, as reported by an agency that we collect data from. 
 
 
 ## Data Dictionary
 
-Note that we use facility and entity interchangably here. While the majority of the rows in these datasets are facilities (e.g. jails or prisons), several rows are geographic entities because an agency reports data at that level. 
+Note that we use facility and entity interchangeably here. While the majority of the rows in these datasets are facilities (e.g. jails or prisons), several rows are geographic entities because an agency reports data at that level. 
 
 #### Facility Information Dataset
 
-| Variable | Description |  |
-|-|-|-|
-| `Facility.ID` | Integer ID that uniquely identifies every facility  |  |
-| `Name` | Cleaned name for the facility  |  |
-| `State` | State where the facility is located |  |
-| `Jurisdiction` | Jurisdiction of the reporting agency. Potential values: `state`, `county`, `federal`.  |  |
-| `Description` | Entity type, more detailed descriptions below. Potential values: `Geographic`, `Administrative`, `Prison`, `Jail`, `Hybrid`, `Reception Center`, `Transitional Center`, `Medical Facility`, `Detention Center`, `Prison Unit`, `Work Camp`, `Aged and Infirmed`.  |  |
-| `Security` | Security level of the facility, designated by UCLA staff based on available information. Potential values: `Max`, `Med`, `Min`, `Max/Med`, `Max/Min`, `Med/Min`.  |  |
-| `Age` | Age group kept in the entity if known, designated by UCLA staff based on available information. Potential values: `Adult`, `Juvenile`, `Mixed`.   |  |
-| `Gender` | Gender group kept in the entity if known, designated by UCLA staff based on available information. Potential values: `Female`, `Male`, `Mixed`.  |  |
-| `Is.Different.Operator` | Binary indicator for whether the entity is run by an organization different from the reporting jurisdiction (e.g. a private company or a county government).  |  |
-| `Different.Operator` | Name of the organization operating the entity if run by an organization different from the reporting jurisdiction. |  |
-| `Population` | Population of the facility as close to February 1, 2020 as possible. This variable is a combination of [HIFLD values](https://hifld-geoplatform.opendata.arcgis.com/datasets/prison-boundaries/data) and data gathered by UCLA staff through public records requests. Population values gathered by UCLA staff were prioritized over data from HIFLD if both were available. Staff-gathered population values were prioritized because they are closer to February 2020 than the HIFLD values, which are from the last several years. |  |
-| `Capacity` | Capacity of the facility if known. This variable is a combination of [HIFLD values](https://hifld-geoplatform.opendata.arcgis.com/datasets/prison-boundaries/data) and data gathered by UCLA staff. Capacity values gathered by UCLA staff were prioritized over data from HIFLD if both were available.  |  |
-| `HIFLD.ID` | Facility's corresponding [Homeland Infrastructure Foundation-Level Data](https://hifld-geoplatform.opendata.arcgis.com/datasets/prison-boundaries/data) ID |  |
-| `BJS.ID` | Facility's corresponding [Bureau of Justice Statistics](https://www.bjs.gov/index.cfm?ty=dca) ID |  |
-| `Source.Population` | Population source. Potential values: `HIFLD`, `Public Records`.  |  |
-| `Source.Capacity` | Capacity source. Potential values: `HIFLD`, `Public Records`.  |  |
-
-Additional geographic fields: `Zipcode`, `City`, `County`, `Latitude`, `Longitude`, `County.FIPS`.
-
-Descriptions of the entity types in the `Description` field are as follows: 
-
-* `Geographic`: Cover a geographic region and are not a particular facility (e.g. statewide values, parole regions) 
-* `Administrative`: Staff specific and do not hold correctional residents (e.g. agency headquarters, training academies)
-* `Prison`: Generally hold individuals who have been convicted of a crime and sentenced. These are exclusively run by state or federal agencies
-* `Jail`: Generally hold individuals who have not been convicted of a crime and are detained or awaiting trial. These facilities also house individuals who have been convicted of a crime but are serving a short sentence. These are generally run by county governments.
-* `Hybrid`: Generally hold both individuals convicted of a crime and individuals who have not been convicted of a crime. These are facilities housed in jurisdictions that combine their prison and jail systems, like Hawaii and DC. 
-* `Reception Center`: Prisons which also serve as intake centers for newly convicted individuals. At these facilities, individuals are designated a security level and assigned to a long-term facility. These facilities can also hold their own long-term populations.
-* `Transitional Center`: Prisons which also serve as re-entry centers for convicted individuals who will be released. These facilities often have transitional programs where individuals are technically trained or work in local communities through occupational programs.
-* `Medical Facility`: Prisons which have significant inpatient and outpatient care services for convicted individuals and typically are correctional hospitals.
-* `Detention Center`: Generally hold individuals who have not been convicted of a crime and are detained or awaiting trial or deportation hearings. These are generally run by state or federal agencies.
-* `Prison Unit`: Units within prisons 
-* `Work Camp`: Prisons that house individuals who generally work on significant labor projects like farming, land management, and firefighting 
-* `Aged and Infirmed`: Prisons that generally house older individuals and individuals with significant chronic diseases 
+| Variable | Description |
+|-|-|
+| `Facility.ID` | Integer ID that uniquely identifies every facility  |
+| `Name` | Cleaned name for the facility  |
+| `State` | State where the facility is located |
+| `Jurisdiction` | Jurisdiction of the reporting agency <br /> Potential values: `state`, `county`, `federal`  |
+| `Description` | Entity type, designated by UCLA staff (see below for more detailed descriptions) <br /> Potential values: `Geographic`, `Administrative`, `Prison`, `Jail`, `Hybrid`, `Reception Center`, `Transitional Center`, `Medical Facility`, `Detention Center`, `Prison Unit`, `Work Camp`, `Aged and Infirmed`  |
+| `Security` | Security level of the facility, designated by UCLA staff <br /> Potential values: `Max`, `Med`, `Min`, `Max/Med`, `Max/Min`, `Med/Min` |
+| `Age` | Age group kept in the entity if known, designated by UCLA staff <br /> Potential values: `Adult`, `Juvenile`, `Mixed`  |
+| `Gender` | Gender group kept in the entity if known, designated by UCLA staff <br /> Potential values: `Female`, `Male`, `Mixed`  |
+| `Is.Different.Operator` | Binary indicator for whether the entity is run by an organization different from the reporting jurisdiction (e.g. a private company or a county government) |
+| `Different.Operator` | Name of the organization operating the entity if run by an organization different from the reporting jurisdiction |
+| `Population` | Population of the facility as close to February 1, 2020 as possible. This variable is a combination of [HIFLD values](https://hifld-geoplatform.opendata.arcgis.com/datasets/prison-boundaries/data) and data gathered by UCLA staff through public records requests. Population values gathered by UCLA staff were prioritized over data from HIFLD if both were available.  |
+| `Capacity` | Capacity of the facility if known. This variable is a combination of [HIFLD values](https://hifld-geoplatform.opendata.arcgis.com/datasets/prison-boundaries/data) and data gathered by UCLA staff. Capacity values gathered by UCLA staff were prioritized over data from HIFLD if both were available.  |
+| `HIFLD.ID` | Facility's corresponding [Homeland Infrastructure Foundation-Level Data](https://hifld-geoplatform.opendata.arcgis.com/datasets/prison-boundaries/data) ID |
+| `BJS.ID` | Facility's corresponding [Bureau of Justice Statistics](https://www.bjs.gov/index.cfm?ty=dca) ID |
+| `Source.Population` | Population source <br /> Potential values: `HIFLD`, `Public Records`  |
+| `Source.Capacity` | Capacity source <br /> Potential values: `HIFLD`, `Public Records`  |
+| `Latitude` | Facility's latitude  | 
+| `Longitude` | Facility's longitude  | 
+| `City` | Facility's city  | 
+| `County` | Facility's county  |
+| `County.FIPS` | Facility's 5-digit county FIPS code  |
+| `Zipcode` | Facility's zipcode  | 
 
 #### Facility Spellings Crosswalk 
 
@@ -78,6 +67,25 @@ Descriptions of the entity types in the `Description` field are as follows:
 | `State`               | State where the facility is located                                                 |
 | `Is.Federal`          | Binary indicator for whether the entity falls under federal jurisdiction            |
 
+
+#### Entity Types 
+
+A key variable in the Facility Information Dataset is the entity type designation (`Description`). Because agencies report data at varying units of aggregation, this variable provides meaningful categorizations for the entities we collect data on. More detailed descriptions of each designation is provided below. 
+
+| Designation | Entity Description |
+|-|-|
+| Geographic | Cover a geographic region and are not a particular facility (e.g. statewide values, parole regions). |
+| Administrative | Staff specific and do not hold correctional residents (e.g. agency headquarters, training academies). |
+| Prison | Generally hold individuals who have been convicted of a crime and sentenced. These are exclusively run by state or federal agencies. |
+| Jail | Generally hold individuals who have not been convicted of a crime and are detained or awaiting trial. These facilities also house individuals who have been convicted of a crime but are serving a short sentence. These are generally run by county governments. |
+| Hybrid | Generally hold both individuals convicted of a crime and individuals who have not been convicted of a crime. These are facilities housed in jurisdictions that combine their prison and jail systems, like Hawaii and DC. |
+| Reception Center | Prisons which also serve as intake centers for newly convicted individuals. At these facilities, individuals are designated a security level and assigned to a long-term facility. These facilities can also hold their own long-term populations. |
+| Transitional Center | Prisons which also serve as re-entry centers for convicted individuals who will be released. These facilities often have transitional programs where individuals are technically trained or work in local communities through occupational programs. |
+| Medical Facility | Prisons which have significant inpatient and outpatient care services for convicted individuals and typically are correctional hospitals. |
+| Detention Center | Generally hold individuals who have not been convicted of a crime and are detained or awaiting trial or deportation hearings. These are generally run by state or federal agencies. |
+| Prison Unit | Units within prisons. |
+| Work Camp | Prisons that house individuals who generally work on significant labor projects like farming, land management, and firefighting |
+| Aged and Infirmed | Prisons that generally house older individuals and individuals with significant chronic diseases |
 
 ## Citations
 
