@@ -35,8 +35,8 @@ Note that we use facility and entity interchangeably here. While the majority of
 | Variable | Description |
 |-|-|
 | `Facility.ID` | Integer ID that uniquely identifies every facility  |
-| `Name` | Cleaned name for the facility  |
 | `State` | State where the facility is located |
+| `Name` | Cleaned name for the facility  |
 | `Jurisdiction` | Jurisdiction of the reporting agency <br /> Potential values: `state`, `county`, `federal`  |
 | `Description` | Entity type, designated by UCLA staff (see below for more detailed descriptions) <br /> Potential values: `Geographic`, `Administrative`, `Prison`, `Jail`, `Hybrid`, `Reception Center`, `Transitional Center`, `Medical Facility`, `Detention Center`, `Prison Unit`, `Work Camp`, `Aged and Infirmed`  |
 | `Security` | Security level of the facility, designated by UCLA staff <br /> Potential values: `Max`, `Med`, `Min`, `Max/Med`, `Max/Min`, `Med/Min` |
@@ -44,26 +44,28 @@ Note that we use facility and entity interchangeably here. While the majority of
 | `Gender` | Gender group kept in the entity if known, designated by UCLA staff <br /> Potential values: `Female`, `Male`, `Mixed`  |
 | `Is.Different.Operator` | Binary indicator for whether the entity is run by an organization different from the reporting jurisdiction (e.g. a private company or a county government) |
 | `Different.Operator` | Name of the organization operating the entity if run by an organization different from the reporting jurisdiction |
-| `Population` | Population of the facility as close to February 1, 2020 as possible. This variable is a combination of [HIFLD values](https://hifld-geoplatform.opendata.arcgis.com/datasets/prison-boundaries/data) and data gathered by UCLA staff through public records requests. Population values gathered by UCLA staff were prioritized over data from HIFLD if both were available.  |
+| `Population.Feb20` | Population of the facility as close to February 1, 2020 as possible. This variable is a combination of [HIFLD values](https://hifld-geoplatform.opendata.arcgis.com/datasets/prison-boundaries/data) and data gathered by UCLA staff through public records requests. Population values gathered by UCLA staff were prioritized over data from HIFLD if both were available.  |
 | `Capacity` | Capacity of the facility if known. This variable is a combination of [HIFLD values](https://hifld-geoplatform.opendata.arcgis.com/datasets/prison-boundaries/data) and data gathered by UCLA staff. Capacity values gathered by UCLA staff were prioritized over data from HIFLD if both were available.  |
 | `HIFLD.ID` | Facility's corresponding [Homeland Infrastructure Foundation-Level Data](https://hifld-geoplatform.opendata.arcgis.com/datasets/prison-boundaries/data) ID |
 | `BJS.ID` | Facility's corresponding [Bureau of Justice Statistics](https://www.bjs.gov/index.cfm?ty=dca) ID |
-| `Source.Population` | Population source <br /> Potential values: `HIFLD`, `Public Records`  |
+| `Source.Population.Feb20` | Population source <br /> Potential values: `HIFLD`, `Public Records`  |
 | `Source.Capacity` | Capacity source <br /> Potential values: `HIFLD`, `Public Records`  |
+| `Address` | Facility's address  | 
+| `City` | Facility's city  | 
+| `Zipcode` | Facility's zipcode  | 
 | `Latitude` | Facility's latitude  | 
 | `Longitude` | Facility's longitude  | 
-| `City` | Facility's city  | 
 | `County` | Facility's county  |
 | `County.FIPS` | Facility's 5-digit county FIPS code  |
-| `Zipcode` | Facility's zipcode  | 
+| `Website` | Facility's website. This corresponds to either the website where COVID-19 data is being reported, or the general website maintained by the facility.  |
 
 #### Facility Spellings Crosswalk 
 
 | Variable              | Description                                                                         |
 |-----------------------|-------------------------------------------------------------------------------------|
 | `Facility.ID`         | Integer ID that uniquely identifies every facility                                  |
-| `facility_name_raw`   | Alternative spelling for the facility                                               |
-| `facility_name_clean` | Cleaned name for the facility                                                       |
+| `xwalk_name_raw`   | Alternative spelling for the facility                                                  |
+| `xwalk_name_clean` | Cleaned name for the facility                                                          |
 | `State`               | State where the facility is located                                                 |
 | `Is.Federal`          | Binary indicator for whether the entity falls under federal jurisdiction            |
 
@@ -84,8 +86,8 @@ A key variable in the Facility Information Dataset is the entity type designatio
 | Medical Facility | Prisons which have significant inpatient and outpatient care services for convicted individuals and typically are correctional hospitals. |
 | Detention Center | Generally hold individuals who have not been convicted of a crime and are detained or awaiting trial or deportation hearings. These are generally run by state or federal agencies. |
 | Prison Unit | Units within prisons. |
-| Work Camp | Prisons that house individuals who generally work on significant labor projects like farming, land management, and firefighting |
-| Aged and Infirmed | Prisons that generally house older individuals and individuals with significant chronic diseases |
+| Work Camp | Prisons that house individuals who generally work on significant labor projects like farming, land management, and firefighting. |
+| Aged and Infirmed | Prisons that generally house older individuals and individuals with significant chronic diseases. |
 
 ## Citations
 
