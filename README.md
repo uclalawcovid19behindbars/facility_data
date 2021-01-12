@@ -89,6 +89,26 @@ A key variable in the Facility Information Dataset is the entity type designatio
 | Work Camp | Prisons that house individuals who generally work on significant labor projects like farming, land management, and firefighting. |
 | Aged and Infirmed | Prisons that generally house older individuals and individuals with significant chronic diseases. |
 
+
+## Update Instructions 
+
+These instructions are intended to be internal reference for the UCLA project team. To update the facility crosswalks with a new facility or new alternative spelling: 
+
+1. Add the new entries to the Google Sheet [here](https://docs.google.com/spreadsheets/d/1tAhD-brnuqw0s55QXM-xYLPsyD-rNrqHbAVIbxSOMwI/edit#gid=363817589), following the instructions in the first tab 
+2. Run `R/main.R`, which does the following: 
+* Reads from the Google Sheet
+* Performs validation checks on the new entries 
+* Populates missing data if possible (e.g. from the HIFLD database) 
+* Assigns a `Facility.ID` to new facilities 
+* Combines the new entries with the existing crosswalks
+* Updates the facility crosswalk `csv` files in the `data` folder 
+
+Note that `main.R` assumes that you have the following: 
+* Access to [the Google Sheet](https://docs.google.com/spreadsheets/d/1tAhD-brnuqw0s55QXM-xYLPsyD-rNrqHbAVIbxSOMwI/edit#gid=363817589), which will automatically generate a valid OAuth token for `googlesheets4`
+* A `geocodio` API key, available from [here](https://www.geocod.io/features/api/) 
+* An updated version of the [`behindbarstools` R package](https://github.com/uclalawcovid19behindbars/behindbarstools) 
+
+
 ## Citations
 
 Citations for academic publications and research reports:
