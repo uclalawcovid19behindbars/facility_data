@@ -64,7 +64,8 @@ is_valid_jurisdiction <- function(jurisdiction) {
     valid_jurisdictions <- c(
         "state", 
         "county", 
-        "federal") 
+        "federal", 
+        "immigration") 
     
     return(jurisdiction %in% valid_jurisdictions)
 }
@@ -446,7 +447,7 @@ populate_new_spellings <- function(
     
     # Merge non-federal facilities on cleaned name AND state 
     non_federal <- new_fac_spellings %>% 
-        filter(!Is.Federal %in% c(1)) %>% # Is.Federal = NA are treated as non-federal 
+        filter(Is.Federal %in% c(0, NA)) %>% # Is.Federal = NA are treated as non-federal 
         mutate(name_clean_ = clean_fac_col_txt(xwalk_name_clean, to_upper = TRUE)) %>% 
         left_join(old_fac_info %>% 
                       filter(Jurisdiction != "federal") %>% 

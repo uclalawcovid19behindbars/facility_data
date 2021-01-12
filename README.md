@@ -103,6 +103,8 @@ These instructions are intended to be internal reference for the UCLA project te
 * Combines the new entries with the existing crosswalks
 * Updates the facility crosswalk `csv` files in the `data` folder 
 
+You should run `main.R` in the order specified (i.e. update `fac_data` before updating `fac_spellings`). 
+
 Note that `main.R` assumes that you have the following: 
 * Access to [the Google Sheet](https://docs.google.com/spreadsheets/d/1tAhD-brnuqw0s55QXM-xYLPsyD-rNrqHbAVIbxSOMwI/edit#gid=363817589), which will automatically generate a valid OAuth token for `googlesheets4`
 * A `geocodio` API key, available from [here](https://www.geocod.io/features/api/) 
