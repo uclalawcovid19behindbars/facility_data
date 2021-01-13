@@ -531,7 +531,7 @@ update_fac_spellings <- function(new_fac_spellings, old_fac_spellings = NULL) {
     
     out <- old_fac_spellings %>% 
         bind_rows(new_fac_spellings) %>% 
-        select(Facility.ID, State, xwalk_name_raw, xwalk_name_clean, Source) %>% 
+        select(Facility.ID, State, xwalk_name_raw, xwalk_name_clean, Source, Is.Federal) %>% 
         arrange(State, xwalk_name_clean)
     
     message(paste("Adding", nrow(new_fac_spellings), "alternative spellings")) 
