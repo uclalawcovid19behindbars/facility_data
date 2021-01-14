@@ -37,7 +37,7 @@ Note that we use facility and entity interchangeably here. While the majority of
 | `Facility.ID` | Integer ID that uniquely identifies every facility  |
 | `State` | State where the facility is located |
 | `Name` | Cleaned name for the facility  |
-| `Jurisdiction` | Jurisdiction of the reporting agency <br /> Potential values: `state`, `county`, `federal`  |
+| `Jurisdiction` | Jurisdiction of the reporting agency <br /> Potential values: `state`, `county`, `federal`, `immigration`  |
 | `Description` | Entity type, designated by UCLA staff (see below for more detailed descriptions) <br /> Potential values: `Geographic`, `Administrative`, `Prison`, `Jail`, `Hybrid`, `Reception Center`, `Transitional Center`, `Medical Facility`, `Detention Center`, `Prison Unit`, `Work Camp`, `Aged and Infirmed`  |
 | `Security` | Security level of the facility, designated by UCLA staff <br /> Potential values: `Max`, `Med`, `Min`, `Max/Med`, `Max/Min`, `Med/Min` |
 | `Age` | Age group kept in the entity if known, designated by UCLA staff <br /> Potential values: `Adult`, `Juvenile`, `Mixed`  |
@@ -64,10 +64,11 @@ Note that we use facility and entity interchangeably here. While the majority of
 | Variable              | Description                                                                         |
 |-----------------------|-------------------------------------------------------------------------------------|
 | `Facility.ID`         | Integer ID that uniquely identifies every facility                                  |
-| `xwalk_name_raw`   | Alternative spelling for the facility                                                  |
-| `xwalk_name_clean` | Cleaned name for the facility                                                          |
+| `xwalk_name_raw`      | Alternative spelling for the facility                                               |
+| `xwalk_name_clean`    | Cleaned name for the facility                                                       |
 | `State`               | State where the facility is located                                                 |
-| `Is.Federal`          | Binary indicator for whether the entity falls under federal jurisdiction            |
+| `Jurisdiction` | Jurisdiction of the reporting agency <br /> Potential values: `state`, `county`, `federal`, `immigration`  |
+| `Source`              | Source where the alternative spelling appears                                       |
 
 
 #### Entity Types 
