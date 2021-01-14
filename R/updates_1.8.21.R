@@ -1,3 +1,6 @@
+# This script was used clean the data sheets after we added new facility details 
+# It also assigns Facility IDs to fac_info and fac_spellings 
+
 rm(list = ls())
 
 library(tidyverse)

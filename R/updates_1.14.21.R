@@ -1,3 +1,8 @@
+# This script was used to transition from `Is.Federal` to an explicit Jurisdiction variable 
+# It also adds all fac_data rows to fac_spellings (where xwalk_name_clean == xwalk_name_raw)
+
+rm(list = ls())
+
 library(tidyverse)
 library(behindbarstools)
 
