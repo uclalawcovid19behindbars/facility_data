@@ -10,7 +10,7 @@ OLD_FAC_SPELLINGS <- read_fac_spellings()
 HIFLD_DATA <- read_hifld_data()
 
 # Specify Google Sheet URL here to avoid using the default! 
-url <- "1oTTKeyiPPXJnjNI5ZzxQFlsb6G49xk-VUSacZPwNCGI"
+url <- "1ThlA_7Ht7-j3b9nY43zNOLZo6BdwxvwEvbPSx8DPrys"
 
 # ------------------------------------------------------------------------------
 # Update facility info sheet 
@@ -18,25 +18,22 @@ url <- "1oTTKeyiPPXJnjNI5ZzxQFlsb6G49xk-VUSacZPwNCGI"
 
 updated_fac_info <- 
     # Read from Google sheet 
-    read_new_fac_info(google_sheet_url = url) %>%
-    # Run QC checks 
-    verify_new_fac_info(
-        new_fac_info = ., 
-        old_fac_info = OLD_FAC_INFO, 
-        old_fac_spellings = OLD_FAC_SPELLINGS) %>% 
+    read_new_fac_info(google_sheet_url = url) %>% 
     # Update missing data from HIFLD, geocode addresses, assign ID   
     populate_new_fac_info(
         new_fac_info = ., 
         old_fac_info = OLD_FAC_INFO, 
         old_fac_spellings = OLD_FAC_SPELLINGS,         
         hifld_data = HIFLD_DATA) %>% 
-    # Combine with existing info sheet 
-    update_fac_info(
+    # Run QC checks 
+    verify_new_fac_info(
         new_fac_info = ., 
-        old_fac_info = OLD_FAC_INFO)
+        old_fac_info = OLD_FAC_INFO, 
+        old_fac_spellings = OLD_FAC_SPELLINGS)
 
 # Replace csv 
-write.csv(updated_fac_info, "data/fac_data.csv", row.names = FALSE)
+write.table(updated_fac_info, "data/fac_data.csv", 
+            append = TRUE, sep = ",", col.names = FALSE, row.names = FALSE)
 
 # ------------------------------------------------------------------------------
 # Update facility spellings sheet 
@@ -47,20 +44,16 @@ write.csv(updated_fac_info, "data/fac_data.csv", row.names = FALSE)
 updated_fac_spellings <- 
     # Read from Google sheet 
     read_new_fac_spellings(google_sheet_url = url) %>% 
+    # Assign ID from fac_info sheet
+    populate_new_spellings(
+        new_fac_spellings = .,
+        old_fac_info = updated_fac_info) %>% 
     # Run QC checks 
     verify_new_fac_spellings(
         new_fac_spellings = ., 
         old_fac_info = updated_fac_info, 
-        old_fac_spellings = OLD_FAC_SPELLINGS) %>% 
-    # Assign ID from fac_info sheet
-    populate_new_spellings(
-        new_fac_spellings = .,
-        old_fac_info = updated_fac_info) %>%
-    # Combine with existing spellings sheet
-    update_fac_spellings(
-        new_fac_spellings = .,
-        old_fac_spellings = OLD_FAC_SPELLINGS, 
-        old_fac_info = updated_fac_info)
+        old_fac_spellings = OLD_FAC_SPELLINGS) 
 
 # Replace csv 
-write.csv(updated_fac_spellings, "data/fac_spellings.csv", row.names = FALSE)
+write.table(updated_fac_spellings, "data/fac_spellings.csv", 
+            append = TRUE, sep = ",", col.names = FALSE, row.names = FALSE)
