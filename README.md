@@ -98,13 +98,12 @@ These instructions are intended to be internal reference for the UCLA project te
 1. Add the new entries to the Google Sheet [here](https://docs.google.com/spreadsheets/d/1tAhD-brnuqw0s55QXM-xYLPsyD-rNrqHbAVIbxSOMwI/edit#gid=363817589), following the instructions in the first tab 
 2. Run `R/main.R`, which does the following: 
 * Reads from the Google Sheet
-* Performs validation checks on the new entries 
 * Populates missing data if possible (e.g. from the HIFLD database) 
+* Performs validation checks on the new entries 
 * Assigns a `Facility.ID` to new facilities 
-* Combines the new entries with the existing crosswalks
 * Updates the facility crosswalk `csv` files in the `data` folder 
 
-You should run `main.R` in the order specified (i.e. update `fac_data` before updating `fac_spellings`). 
+You should run `main.R` in the order specified (i.e. update `fac_data` before updating `fac_spellings`) when adding both facilities and spellings at the same time. 
 
 Note that `main.R` assumes that you have the following: 
 * Access to [the Google Sheet](https://docs.google.com/spreadsheets/d/1tAhD-brnuqw0s55QXM-xYLPsyD-rNrqHbAVIbxSOMwI/edit#gid=363817589), which will automatically generate a valid OAuth token for `googlesheets4`
