@@ -9,7 +9,7 @@ OLD_FAC_INFO <- read_fac_info()
 OLD_FAC_SPELLINGS <- read_fac_spellings()
 HIFLD_DATA <- read_hifld_data()
 
-# Specify Google Sheet URL here to avoid using the default! 
+# Specify Google Sheet URL here! 
 url <- "1ThlA_7Ht7-j3b9nY43zNOLZo6BdwxvwEvbPSx8DPrys"
 
 # ------------------------------------------------------------------------------
@@ -39,7 +39,11 @@ write.table(updated_fac_info, "data/fac_data.csv",
 # Update facility spellings sheet 
 # ------------------------------------------------------------------------------
 
-# Note: updated_fac_info (created above) is paseed into old_fac_info below 
+# If you updated fac_info above, use the latest version of fac_info updated above 
+# If you are only adding spellings, use OLD_FAC_INFO 
+if (!exists("updated_fac_info")) {
+    updated_fac_info <- OLD_FAC_INFO
+}
 
 updated_fac_spellings <- 
     # Read from Google sheet 
