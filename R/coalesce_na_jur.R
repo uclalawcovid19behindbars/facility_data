@@ -50,12 +50,14 @@ fac_data_out$Jurisdiction[fac_data_out$Name == "OCC FORDLAND"] <- "state"
 # drop rows with missing critical data
 fac_spellings_final <- fac_spellings_out %>%
   filter(!is.na(Jurisdiction)) %>% # drop remaining NA jurisdictions (MN ambiguous ones)
-  filter(!is.na(Facility.ID))      # drop CORRECTIONAL ALTERNATIVES INC RRC SAN DIEGO from na_jur_fix branch
-
+  filter(!is.na(Facility.ID))  %>%    # drop CORRECTIONAL ALTERNATIVES INC RRC SAN DIEGO from na_jur_fix branch
+  select(-X1)
+  
 fac_data_final <- fac_data_out %>%
-  filter(!is.na(Jurisdiction))
+  filter(!is.na(Jurisdiction)) %>%
+  select(-X1)
 
-write.csv(fac_spellings_final, file.path(dat_path, "fac_spellings.csv"))
-write.csv(fac_data_final, file.path(dat_path, "fac_data.csv"))
+write_csv(fac_spellings_final, file.path(dat_path, "fac_spellings.csv"))
+write_csv(fac_data_final, file.path(dat_path, "fac_data.csv"))
 
 
