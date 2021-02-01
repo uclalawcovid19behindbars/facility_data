@@ -38,7 +38,7 @@ Note that we use facility and entity interchangeably here. While the majority of
 | `State` | State where the facility is located |
 | `Name` | Cleaned name for the facility  |
 | `Jurisdiction` | Jurisdiction of the reporting agency <br /> Potential values: `state`, `county`, `federal`, `immigration`  |
-| `Description` | Entity type, designated by UCLA staff (see below for more detailed descriptions) <br /> Potential values: `Geographic`, `Administrative`, `Prison`, `Jail`, `Hybrid`, `Reception Center`, `Transitional Center`, `Medical Facility`, `Detention Center`, `Prison Unit`, `Work Camp`, `Aged and Infirmed`  |
+| `Description` | Entity type, designated by UCLA staff (see below for more detailed descriptions) <br /> Potential values: `Geographic`, `Administrative`, `Prison`, `Jail`, `Hybrid`, `Reception Center`, `Transitional Center`, `Medical Facility`, `Detention Center`, `Prison Unit`, `Work Camp`, `Aged and Infirmed`, `Contractor`  |
 | `Security` | Security level of the facility, designated by UCLA staff <br /> Potential values: `Max`, `Med`, `Min`, `Max/Med`, `Max/Min`, `Med/Min` |
 | `Age` | Age group kept in the entity if known, designated by UCLA staff <br /> Potential values: `Adult`, `Juvenile`, `Mixed`  |
 | `Gender` | Gender group kept in the entity if known, designated by UCLA staff <br /> Potential values: `Female`, `Male`, `Mixed`  |
@@ -89,6 +89,7 @@ A key variable in the Facility Information Dataset is the entity type designatio
 | Prison Unit | Units within prisons. |
 | Work Camp | Prisons that house individuals who generally work on significant labor projects like farming, land management, and firefighting. |
 | Aged and Infirmed | Prisons that generally house older individuals and individuals with significant chronic diseases. |
+| Contractor | Non-government agencies (e.g. private companies, charities, etc.) that report data to a correctional agency. Many of these agencies provide services like drug treatment, job placement, and halfway housing among others. | 
 
 
 ## Update Instructions 
