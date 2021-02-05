@@ -573,8 +573,7 @@ update_fac_info <- function(new_fac_info, old_fac_info = NULL) {
     }
     
     out <- old_fac_info %>% 
-        bind_rows(new_fac_info) %>% 
-        arrange(State, Name)
+        bind_rows(new_fac_info) 
     
     message(paste("New facility info crosswalk contains", nrow(out), "facilities."))
     
@@ -611,8 +610,7 @@ update_fac_spellings <- function(
         select(Facility.ID, State, xwalk_name_raw, xwalk_name_clean, Jurisdiction)
     
     out <- bind_rows(dirty_spellings, clean_spellings) %>% 
-        unique() %>% 
-        arrange(State, xwalk_name_clean, xwalk_name_raw) 
+        unique() 
     
     message(paste("New facility spellings crosswalk contains", nrow(out), "spellings"))
     
