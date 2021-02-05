@@ -1,6 +1,7 @@
 library(tidyverse)
 library(behindbarstools)
 library(docstring)
+library(hablar)
 
 # ------------------------------------------------------------------------------
 # READ SHEETS 
@@ -22,7 +23,34 @@ read_new_fac_info <- function(google_sheet_url = NULL) {
     google_sheet_url %>% 
         googlesheets4::read_sheet(sheet = "fac_data", 
                                   range = readxl::cell_cols("A:W"), 
-                                  col_types = "cccccccdcddddcccccddccc") %>% 
+                                  col_types = "c") %>%
+        hablar::convert(
+            hablar::chr(
+                State, 
+                Name, 
+                Description, 
+                Jurisdiction, 
+                Security, 
+                Age, 
+                Gender, 
+                Different.Operator, 
+                Source.Population.Feb20, 
+                Source.Capacity, 
+                Address, 
+                City, 
+                Zipcode, 
+                County, 
+                Website, 
+                County.FIPS), 
+            hablar::dbl(
+                Population.Feb20, 
+                Capacity, 
+                HIFLD.ID, 
+                BJS.ID, 
+                Latitude, 
+                Longitude), 
+            hablar::lgl(
+                Is.Different.Operator)) %>% 
         mutate(Name = clean_fac_col_txt(Name, to_upper = TRUE)) %>% 
         unique()
 }
@@ -41,7 +69,8 @@ read_new_fac_spellings <- function(google_sheet_url = NULL) {
     }
     
     google_sheet_url %>% 
-        googlesheets4::read_sheet(sheet = "fac_spellings") %>% 
+        googlesheets4::read_sheet(sheet = "fac_spellings", 
+                                  col_types = "c") %>% 
         mutate(xwalk_name_raw = clean_fac_col_txt(xwalk_name_raw, to_upper = TRUE), 
                xwalk_name_clean = clean_fac_col_txt(xwalk_name_clean, to_upper = TRUE)) %>% 
         unique()
@@ -72,7 +101,6 @@ generate_new_fac_id <- function(old_fac_info = NULL, old_fac_spellings = NULL) {
     
     return (max_id + 1) 
 }
-    
 
 pull_hifld_field <- function(id, field, hifld_data = NULL) {
     #' Get HIFLD data for a single field and ID  
@@ -100,7 +128,6 @@ pull_hifld_field <- function(id, field, hifld_data = NULL) {
     
     return (out)
 }
-
 
 populate_new_fac_info <- function(
     new_fac_info = NULL, old_fac_info = NULL, old_fac_spellings = NULL, hifld_data = NULL) {
@@ -135,7 +162,6 @@ populate_new_fac_info <- function(
                capacity_source = ifelse(is.na(CAPACITY), NA, "HIFLD"))
     
     new_fac_info %>%
-        
         # Populate from HIFLD 
         rowwise() %>% 
         mutate(
@@ -200,7 +226,6 @@ populate_new_fac_info <- function(
             old_fac_info = old_fac_info, 
             old_fac_spellings = old_fac_spellings) + row_number() - 1)
 }
-
 
 populate_new_spellings <- function(
     new_fac_spellings = NULL, old_fac_info = NULL) {
@@ -280,6 +305,7 @@ is_valid_description <- function(description) {
         "Prison Unit", 
         "Work Camp", 
         "Aged and Infirmed", 
+        "Contractor", 
         NA) 
     
     return(description %in% valid_descriptions)
@@ -353,6 +379,19 @@ is_valid_longitude <- function(lon) {
     return (lon > min_lon & lon < max_lon)
 }
 
+is_valid_id <- function(id, old_fac_info = NULL) {
+    if (is.null(old_fac_info)) {
+        old_fac_info <- read_fac_info()
+    }
+    
+    valid_ids <- old_fac_info %>% 
+        select(Facility.ID) %>% 
+        distinct() %>% 
+        unlist()
+    
+    return (id %in% valid_ids)
+}
+
 get_custom_warning <- function(text, row, value = NULL) {
     if (is.null(value)) {
         warning(paste0(text, " : ", row$Name, " (", row$State, ")"), call. = FALSE) 
@@ -362,35 +401,24 @@ get_custom_warning <- function(text, row, value = NULL) {
     )
 } 
 
-verify_new_fac_info <- function(
-    new_fac_info = NULL, old_fac_info = NULL, old_fac_spellings = NULL) {
+verify_new_fac_info <- function(new_fac_info = NULL) {
     #' Verify UCLA facility data updates 
     #'
-    #' Logs and drops facility info entries that are duplicates (i.e. perfect 
-    #' matches after basic string cleaning) of existing entries in the facility 
-    #' info sheet or entries with other data validation issues.  
+    #' Logs and drops facility info entries with data validation issues.  
     #'
     #' @param new_fac_info data frame, new facility info updates
-    #' @param old_fac_info data frame, existing facility info  
-    #' @param old_fac_spellings data frame, existing facility spellings 
     #'
-    #' @return data frame, dropping entries with invalid values or that duplicate 
-    #' facilities in the existing facility info sheet. 
+    #' @return data frame, dropping entries with invalid values. 
     
     if (is.null(new_fac_info)) {
         new_fac_info <- read_new_fac_info() 
     }
-    if (is.null(old_fac_info)) {
-        old_fac_info <- read_fac_info()
-    }
-    if (is.null(old_fac_spellings)) {
-        old_fac_spellings <- read_fac_spellings()
-    }
+    
+    message(paste("Read", nrow(new_fac_info), "facilities.")) 
     
     out <- new_fac_info %>%
         rowwise() %>% 
-        mutate(exists_ = is_fac_name(Name, State, old_fac_info, old_fac_spellings),
-               valid_state_ = is_valid_state(State), 
+        mutate(valid_state_ = is_valid_state(State), 
                valid_jurisdiction_ = is_valid_jurisdiction(Jurisdiction),
                valid_description_ = is_valid_description(Description),
                valid_security_ = is_valid_security(Security), 
@@ -401,8 +429,7 @@ verify_new_fac_info <- function(
                valid_source_cap_ = is_valid_source(Source.Capacity),  
                valid_lat_ = is_valid_latitude(Latitude),
                valid_long_ = is_valid_longitude(Longitude), 
-               drop_ = ifelse(exists_ == TRUE # Drop if DOES already exist (i.e. is duplicated)
-                              | valid_state_ == FALSE
+               drop_ = ifelse(valid_state_ == FALSE
                               | valid_jurisdiction_ == FALSE
                               | valid_description_ == FALSE 
                               | valid_security_ == FALSE 
@@ -417,11 +444,9 @@ verify_new_fac_info <- function(
     
     ndrops <- nrow(out %>% filter(drop_))
     if (ndrops > 0) {
-        warning(paste("DROPPING", ndrops, "ROWS."))
+        warning(paste("Dropping", ndrops, "rows."))
         for(i in 1:nrow(out)) {
             row <- out[i,]
-            if (row$exists_) {
-                get_custom_warning("Facility already exists", row)} 
             if (!row$valid_state_) {
                 get_custom_warning("State name is invalid", row, row$State)}
             if (!row$valid_jurisdiction_) {
@@ -453,13 +478,23 @@ verify_new_fac_info <- function(
                Capacity, HIFLD.ID, BJS.ID, Source.Population.Feb20, Source.Capacity, Address,
                City, Zipcode, Latitude, Longitude, County, County.FIPS, Website)
     
-    message(paste("ADDING", nrow(out), "FACILITIES.")) 
+    # Check for duplicate IDs 
+    if (length(unique(out$Facility.ID)) != length(out$Facility.ID)) {
+        dupes <- out %>% 
+            group_by(Facility.ID) %>% 
+            summarise(n = n()) %>% 
+            filter(n > 1) %>% 
+            pull(Facility.ID)
+        
+        warning(paste0("Duplicated Facility IDs found : ", dupes), call. = FALSE)
+    }
+    
+    message(paste("Verified", nrow(out), "facilities.")) 
     
     return (out)
 }
 
-verify_new_fac_spellings <- function(
-    new_fac_spellings = NULL, old_fac_info = NULL, old_fac_spellings = NULL) {
+verify_new_fac_spellings <- function(new_fac_spellings = NULL, old_fac_info = NULL) {
     #' Verify UCLA facility spellings updates 
     #'
     #' Logs and drops facility spelling entries with invalid state names or without 
@@ -468,7 +503,6 @@ verify_new_fac_spellings <- function(
     #'
     #' @param new_fac_spellings data frame, new facility spelling updates
     #' @param old_fac_info data frame, existing facility info  
-    #' @param old_fac_spellings data frame, existing facility spellings 
     #'
     #' @return data frame, dropping entries with invalid state names or without 
     #' matches in the facility info sheet. 
@@ -479,39 +513,106 @@ verify_new_fac_spellings <- function(
     if (is.null(old_fac_info)) {
         old_fac_info <- read_fac_info()
     }
-    if (is.null(old_fac_spellings)) {
-        old_fac_spellings <- read_fac_spellings()
-    }
+    
+    message(paste("Read", nrow(new_fac_spellings), "alternative spellings.")) 
     
     out <- new_fac_spellings %>% 
         rowwise() %>% 
-        mutate(exists_ = is_fac_name(xwalk_name_clean, State, old_fac_info, old_fac_spellings, include_alt = FALSE),
+        mutate(valid_id_ = is_valid_id(Facility.ID, old_fac_info), 
+               valid_name_ = is_fac_name(xwalk_name_clean, State, old_fac_info, new_fac_spellings, include_alt = FALSE),
                valid_state_ = is_valid_state(State), 
                Name = xwalk_name_clean, 
                valid_jurisdiction_ = is_valid_jurisdiction(Jurisdiction), 
-               drop_ = ifelse(exists_ == FALSE # Drop if does NOT already exist in fac_info 
+               drop_ = ifelse(valid_id_ == FALSE
+                              | valid_name_ == FALSE 
                               | valid_state_ == FALSE  
                               | valid_jurisdiction_ == FALSE, 
                               TRUE, FALSE))
     
     ndrops <- nrow(out %>% filter(drop_))
     if (ndrops > 0) {
-        warning(paste("DROPPING", ndrops, "ROWS."))
+        warning(paste("Dropping", ndrops, "rows."))
         for(i in 1:nrow(out)) {
             row <- out[i,]
-            if (!row$exists_) {
-                get_custom_warning("Clean name does not exist in fac_info:", row)} 
+            if (!row$valid_id_) {
+                get_custom_warning("Facility ID does not exist in fac_info", row, row$Facility.ID)}
+            if (!row$valid_name_) {
+                get_custom_warning("Clean name does not exist in fac_info", row)} 
             if (!row$valid_state_) {
-                get_custom_warning("State name is invalid:", row, row$State)}
+                get_custom_warning("State name is invalid", row, row$State)}
             if (!row$valid_jurisdiction_) {
-                et_custom_warning("Jurisdiction is invalid", row, row$Jurisdiction)}
+                get_custom_warning("Jurisdiction is invalid", row, row$Jurisdiction)}
         }}
     
     out <- out %>% 
         filter(drop_ %in% c(NA, FALSE)) %>% 
         select(Facility.ID, State, xwalk_name_raw, xwalk_name_clean, Jurisdiction)
     
-    message(paste("ADDING", nrow(out), "ALTERNATIVE SPELLINGS.")) 
+    message(paste("Verified", nrow(out), "alternative spellings.")) 
     
     return (out)
 } 
+
+# ------------------------------------------------------------------------------
+# UPDATE DATA 
+# ------------------------------------------------------------------------------
+
+update_fac_info <- function(new_fac_info, old_fac_info = NULL) {
+    #' Update UCLA facility data 
+    #' 
+    #' Updates the UCLA facility info sheet by combining the existing sheet with 
+    #' the new entries. 
+    #'
+    #' @param new_fac_info data frame, new facility info updates
+    #' @param old_fac_info data frame, existing facility info  
+    #' 
+    #' @return data frame, combining existing and new facilities  
+    
+    if (is.null(old_fac_info)) {
+        old_fac_info <- read_fac_info()
+    }
+    
+    out <- old_fac_info %>% 
+        bind_rows(new_fac_info) 
+    
+    message(paste("New facility info crosswalk contains", nrow(out), "facilities."))
+    
+    return (out)
+} 
+
+update_fac_spellings <- function(
+    new_fac_spellings, old_fac_spellings = NULL, old_fac_info = NULL) {
+    #' Update UCLA facility spellings 
+    #' 
+    #' Updates the UCLA facility alternative spellings sheet by combining the 
+    #' existing sheet with the new entries. 
+    #'
+    #' @param new_fac_spellings data frame, new facility spelling updates
+    #' @param old_fac_spellings data frame, existing facility spellings 
+    #' #' @param old_fac_info data frame, existing facility info  
+    #' 
+    #' @return data frame, combining existing and new spellings  
+    
+    if (is.null(old_fac_spellings)) {
+        old_fac_info <- read_fac_spellings()
+    }
+    if (is.null(old_fac_info)) {
+        old_fac_info <- read_fac_info()
+    }
+    
+    dirty_spellings <- old_fac_spellings %>% 
+        bind_rows(new_fac_spellings) %>% 
+        select(Facility.ID, State, xwalk_name_raw, xwalk_name_clean, Jurisdiction)
+    
+    clean_spellings <- old_fac_info %>% 
+        mutate(xwalk_name_raw = Name, 
+               xwalk_name_clean = Name) %>% 
+        select(Facility.ID, State, xwalk_name_raw, xwalk_name_clean, Jurisdiction)
+    
+    out <- bind_rows(dirty_spellings, clean_spellings) %>% 
+        unique() 
+    
+    message(paste("New facility spellings crosswalk contains", nrow(out), "spellings"))
+    
+    return (out)
+}
