@@ -205,12 +205,11 @@ populate_new_fac_info <- function(
         ) %>% 
         ungroup() %>%
         
-        # Geocode addresses
+        # # Geocode addresses
         tidygeocoder::geocode(
-            method = "geocodio", 
+            method = "geocodio",
             street = Address,
             city = City,
-            county = County,
             state = State,
             postalcode = Zipcode,
             lat = "lat_geo_",
