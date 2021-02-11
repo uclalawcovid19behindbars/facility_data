@@ -10,7 +10,7 @@ OLD_FAC_SPELLINGS <- read_fac_spellings()
 HIFLD_DATA <- read_hifld_data() 
 
 # Specify Google Sheet URL here! 
-url <- "1oTTKeyiPPXJnjNI5ZzxQFlsb6G49xk-VUSacZPwNCGI"
+url <- "1DuaobAABkA8JtcqLghYrjkcHYTsA7pAfBKCdG-34NME"
 
 # ------------------------------------------------------------------------------
 # Update facility info sheet 
