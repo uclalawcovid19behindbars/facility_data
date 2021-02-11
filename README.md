@@ -58,6 +58,7 @@ Note that we use facility and entity interchangeably here. While the majority of
 | `County` | Facility's county  |
 | `County.FIPS` | Facility's 5-digit county FIPS code  |
 | `Website` | Facility's website. This corresponds to either the website where COVID-19 data is being reported, or the general website maintained by the facility.  |
+| `ICE.Field.Office` | 3 letter code for ICE enforcement and removal office only shuld be present if Jurisdiction is immigration example of codes [here](https://www.ice.gov/doclib/detention/FY21-detentionstats.xlsx)|
 
 #### Facility Spellings Crosswalk 
 

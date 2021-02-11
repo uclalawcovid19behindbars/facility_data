@@ -22,7 +22,7 @@ read_new_fac_info <- function(google_sheet_url = NULL) {
     
     google_sheet_url %>% 
         googlesheets4::read_sheet(sheet = "fac_data", 
-                                  range = readxl::cell_cols("A:W"), 
+                                  range = readxl::cell_cols("A:X"), 
                                   col_types = "c") %>%
         hablar::convert(
             hablar::chr(
@@ -41,7 +41,8 @@ read_new_fac_info <- function(google_sheet_url = NULL) {
                 Zipcode, 
                 County, 
                 Website, 
-                County.FIPS), 
+                County.FIPS,
+                ICE.Field.Office), 
             hablar::dbl(
                 Population.Feb20, 
                 Capacity, 
@@ -476,7 +477,7 @@ verify_new_fac_info <- function(new_fac_info = NULL) {
         select(Facility.ID, State, Name, Jurisdiction, Description, Security,
                Age, Gender, Is.Different.Operator, Different.Operator, Population.Feb20,
                Capacity, HIFLD.ID, BJS.ID, Source.Population.Feb20, Source.Capacity, Address,
-               City, Zipcode, Latitude, Longitude, County, County.FIPS, Website)
+               City, Zipcode, Latitude, Longitude, County, County.FIPS, Website, ICE.Field.Office)
     
     # Check for duplicate IDs 
     if (length(unique(out$Facility.ID)) != length(out$Facility.ID)) {
