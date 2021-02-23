@@ -11,7 +11,7 @@ df_update <- read_sheet("1oTTKeyiPPXJnjNI5ZzxQFlsb6G49xk-VUSacZPwNCGI", 2) %>%
 # read the old data
 df_old <- read_fac_info()
 # make sure we know the old column order and appropriate var names
-col_order <- names(df)
+col_order <- names(df_old)
 
 # get non immigration data as a separate dataset that we wont touch
 df_non_ice <- df_old %>%
@@ -71,7 +71,7 @@ over_sf <- filter(df_ice_raw, !is.na(Latitude)) %>%
 if(any(over_sf$State != over_sf$STATENAME)){
     stop("Something went horribly wrong with geocoding")
 }
-updated_fac_spellings
+
 # finally add in the new county level information
 df_ice <- df_ice_raw %>%
     select(-County, County.FIPS) %>%
@@ -83,7 +83,7 @@ df_ice <- df_ice_raw %>%
 
 # put the ice data back with the none ice data
 df_new <- df_non_ice %>%
-    bind_rows(df_ice) %>%
+    bind_rows(mutate(df_ice, Zipcode = as.character(Zipcode))) %>%
     select(!!col_order)
 
 # check to make sure the dims match
