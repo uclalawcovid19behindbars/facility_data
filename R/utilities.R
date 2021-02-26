@@ -34,6 +34,8 @@ read_new_fac_info <- function(google_sheet_url = NULL) {
                 Age, 
                 Gender, 
                 Different.Operator, 
+                HIFLD.ID, 
+                BJS.ID, 
                 Source.Population.Feb20, 
                 Source.Capacity, 
                 Address, 
@@ -46,8 +48,6 @@ read_new_fac_info <- function(google_sheet_url = NULL) {
             hablar::dbl(
                 Population.Feb20, 
                 Capacity, 
-                HIFLD.ID, 
-                BJS.ID, 
                 Latitude, 
                 Longitude), 
             hablar::lgl(
@@ -276,7 +276,7 @@ is_valid_jurisdiction <- function(jurisdiction) {
     #' Returns TRUE if the given jurisdiction is valid 
     #' 
     #' Returns TRUE if the given jurisdiction is in the list of valid 
-    #' jurisdictions (state, county, federal). 
+    #' jurisdictions (state, county, federal, immigration, psych). 
     #' 
     #' @param jurisdiction character string of the jurisdiction to check 
     #' 
@@ -286,7 +286,8 @@ is_valid_jurisdiction <- function(jurisdiction) {
         "state", 
         "county", 
         "federal", 
-        "immigration") 
+        "immigration", 
+        "psychiatric") 
     
     return(jurisdiction %in% valid_jurisdictions)
 }
@@ -372,7 +373,7 @@ is_valid_latitude <- function(lat) {
 }
 
 is_valid_longitude <- function(lon) {
-    min_lon <- -165
+    min_lon <- -170
     max_lon <- -60
     
     if (is.na(lon)) {return (TRUE)}
