@@ -2088,3 +2088,6 @@
 2176,"Alaska","POINT MACKENZIE CORRECTIONAL FARM","state",,,,,,,49,112,"10001236",,"HIFLD","HIFLD","P.O. BOX 877730","WASILLA","99687",61.4172921006656,-150.081915793912,"MATANUSKA-SUSITNA","02170","http://www.correct.state.ak.us/institutions",
 2177,"Alaska","YUKON KUSKOKWIM CORRECTIONAL CENTER","state",,,,,,,170,232,"10003761",,"HIFLD","HIFLD","1000 CHIEF EDDIE HOFFMAN HWY.","BETHEL","99559",60.786218002826,-161.787347454918,"BETHEL","02050","http://www.correct.state.ak.us/institutions",
 2178,"California","SANTA BARBARA JAILS","county",,,,,,,779,659,"10000865",,"HIFLD","HIFLD","4436 CALLE REAL","SANTA BARBARA","93110",34.4449050199534,-119.777127650233,"SANTA BARBARA","06083","https://www.sbsheriff.org/command-and-divisions/custody-operations/jail-operations-division/jail-facilities/",
+2179,"Iowa","ICE POTTAWATTAMIE COUNTY JAIL","immigration",,,,,,,,,,,,,"1400 Big Lake Rd","COUNCIL BLUFFS","51501",41.284812,-95.865373,"POTTAWATTAMIE",,,"SPM"
+2180,"Michigan","ICE MONROE COUNTY DETENTION","immigration",,,,,,,,,,,,,"7000 EAST DUNBAR ROAD","MONROE","48161",41.895571,-83.393282,"MONROE",,,"DET"
+2181,"Texas","ICE EL PASO COUNTY JAIL","immigration",,,,,,,,,,,,,"601 E Overland Ave","EL PASO","79901",31.758461,-106.483146,"EL PASO",,,"ELP"
