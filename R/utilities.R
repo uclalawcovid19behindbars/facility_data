@@ -358,6 +358,7 @@ is_valid_source <- function(source) {
     valid_sources <- c(
         "HIFLD", 
         "Public Records", 
+        "Vera Jail Population Data", 
         NA)
     
     return(source %in% valid_sources)  
