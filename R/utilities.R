@@ -547,8 +547,22 @@ verify_new_fac_spellings <- function(new_fac_spellings = NULL, old_fac_info = NU
         }}
     
     out <- out %>% 
-        filter(drop_ %in% c(NA, FALSE)) %>% 
+        filter(drop_ %in% c(NA, FALSE)) %>%
         select(Facility.ID, State, xwalk_name_raw, xwalk_name_clean, Jurisdiction)
+    
+    # Flag if one raw name/state/jurisdiction matches to multiple clean names 
+    dupes <- out %>% 
+        group_by(xwalk_name_raw, State, Jurisdiction) %>% 
+        summarise(n = n()) %>% 
+        filter(n > 1)
+    
+    if(nrow(dupes) > 0){
+        warning(paste("Duplicate matches for the following:"))
+        for(i in 1:nrow(dupes)) {
+            row <- dupes[i,]
+            warning(paste0(row$xwalk_name_raw), " (", row$State, ")")
+        }
+    }
     
     message(paste("Verified", nrow(out), "alternative spellings.")) 
     
