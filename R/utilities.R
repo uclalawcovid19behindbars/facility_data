@@ -256,11 +256,11 @@ populate_new_spellings <- function(
 
     # Merge county and state facilities on cleaned name AND state 
     non_federal <- new_fac_spellings %>% 
-        filter(Jurisdiction %in% c("state", "county")) %>% 
+        filter(Jurisdiction %in% c("state", "county", "psychiatric")) %>% 
         mutate(name_clean_ = clean_fac_col_txt(xwalk_name_clean, to_upper = TRUE)) %>% 
         select(-Jurisdiction) %>% 
         left_join(old_fac_info %>% 
-                      filter(Jurisdiction %in% c("state", "county")) %>% 
+                      filter(Jurisdiction %in% c("state", "county", "psychiatric")) %>% 
                       mutate(name_clean_ = clean_fac_col_txt(Name, to_upper = TRUE)),
                   by = c("name_clean_", "State")) %>% 
         select(Facility.ID, xwalk_name_raw, xwalk_name_clean, State, Jurisdiction, Source)
