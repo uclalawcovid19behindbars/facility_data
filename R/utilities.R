@@ -224,7 +224,11 @@ populate_new_fac_info <- function(
         # Assign Facility.ID
         mutate(Facility.ID = generate_new_fac_id(
             old_fac_info = old_fac_info, 
-            old_fac_spellings = old_fac_spellings) + row_number() - 1)
+            old_fac_spellings = old_fac_spellings) + row_number() - 1) %>% 
+        
+        # Pad FIPS and zips 
+        mutate(County.FIPS = stringr::str_pad(County.FIPS, 5, pad = "0"), 
+               Zipcode = stringr::str_pad(Zipcode, 5, pad = "0"))
 }
 
 populate_new_spellings <- function(
