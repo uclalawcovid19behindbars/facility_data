@@ -21,7 +21,10 @@ updated_fac_info <- old_fac_info %>%
            Different.Operator = coalesce(Different.Operator.New, Different.Operator)) %>% 
     select(-ends_with(".New")) %>% 
     mutate(Different.Operator = ifelse(Different.Operator %in% c("Core Civic", "CoreCivic"), "CoreCivic", Different.Operator)) %>% 
-    mutate(Different.Operator = na_if(Different.Operator, "NA"))
+    mutate(Different.Operator = dplyr::na_if(Different.Operator, "NA")) %>% 
+    # Sneak in fix for WV staff categories 
+    rows_update(tibble(Facility.ID = 2468,
+                       Age = "Juvenile")) 
 
 # Sanity checks 
 verify_new_fac_info(updated_fac_info)
