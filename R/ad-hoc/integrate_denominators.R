@@ -8,8 +8,7 @@ feb20_updates_raw <- googlesheets4::read_sheet("1EnXEEKVdAPHcKblqMSaMWb8bcfUqUBK
                                            col_types = "c")
 
 feb20_updates <- feb20_updates_raw %>% 
-    mutate(`New Population.Feb20` = as.numeric(`New Population.Feb20`), 
-           `Old Population.Feb20` = as.numeric(`Old Population.Feb20`), 
+    mutate(`New Population.Feb20` = as.numeric(gsub(",", "", `New Population.Feb20`)), 
            Facility.ID = as.numeric(Facility.ID)) %>% 
     filter(Checked == "ET") %>% 
     filter(!is.na(`New Population.Feb20`)) %>% 
