@@ -363,6 +363,7 @@ is_valid_source <- function(source) {
         "HIFLD", 
         "Public Records", 
         "Vera Jail Population Data", 
+        "PREA Audit", 
         NA)
     
     return(source %in% valid_sources)  
