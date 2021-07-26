@@ -2281,3 +2281,5 @@
 2728,"Vermont","SPRINGFIELD PROBATION AND PAROLE OFFICE","state",,,,,,,,,,,,,,,,44.060542,-72.673307,,,,
 2729,"West Virginia","NON-FACILITY STAFF TOTAL","state",,,,,,,,,,,,,,,,37.552029,-80.539672,,,,
 2730,"Arizona","ICE WINGATE BY WYNDHAM - HOUSE OF HOPE","immigration",,,,,,,,,,,,,"1760 S Sunridge Dr","YUMA","85365",32.695893,-114.604079,"YUMA","04027",,
+2731,"Montana","WATCH EAST GLENDIVE","state","Medical Facility","Min","Adult","Female",FALSE,,,48,,,,"Public Records","700 LITTLE STREET","GLENDIVE","59330",47.11471381,-104.6905941,"DAWSON COUNTY","00021","http://www.cccscorp.com/programs/watche/",
+2732,"Idaho","SAGUARO CORRECTIONAL CENTER ELOY ARIZONA","state","Prison","Med","Adult","Male",TRUE,"CoreCivic",1226,1926,"10003973",,"Public Records","Public Records","1250 EAST ARICA ROAD","ELOY","85131",32.80930398,-111.5264356,"PINAL","04021","https://www.idoc.idaho.gov/content/locations/prisons/SCC",
