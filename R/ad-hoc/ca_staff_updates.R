@@ -125,7 +125,37 @@ ids_to_rm_from_diff_name_pattern <- diff_name_pattern %>%
 ## filter out IDs from bad entries 
 ## (I add these entries below in fac_spellings)
 updated_fac_info <- interim_fac_info %>%
-  filter(Facility.ID %!in% ids_to_rm_from_diff_name_pattern)
+  filter(Facility.ID %!in% ids_to_rm_from_diff_name_pattern) %>%
+  select(-county_name) %>%
+  mutate(Description = ifelse(str_detect(Name, "CDCR CCHCS"), NA, Description))
+
+# check to make sure description change worked
+# updated_fac_info %>% 
+#   filter(State == "California" & Description == "Work Camp") %>% 
+#   View()
+
+## change name of ALL CDCR CCHCS facs 
+all_cdcr_ids <- updated_fac_info %>%
+  filter(State == "California" & str_detect(Name, "CDCR CCHCS")) %>%
+  pull(Facility.ID)
+
+fac_info_out <- updated_fac_info %>%
+  mutate(County = ifelse(Facility.ID %in% all_cdcr_ids, 
+                         str_remove_all(Name, "CDCR CCHCS WORKSITE LOCATION |COUNTY"),
+                         County),
+        County = ifelse(Facility.ID %in% all_cdcr_ids,
+                        str_squish(County),
+                        County)) %>%
+  ## special treatment for ID = 110 needed
+  mutate(Name = ifelse(Facility.ID %in% all_cdcr_ids,
+                       glue('CDCR CCHCS WORKSITE - {County} COUNTY'),
+                       Name),
+         Name = ifelse(Facility.ID == 110, "CDCR CCHCS WORKSITE - SOUTHERN REGION", Name),
+         County = ifelse(Facility.ID == 110, NA, County))
+
+fac_info_out %>%
+  filter(Facility.ID %in% all_cdcr_ids) %>%
+  View()
 
 # FAC SPELLINGS CHANGES.... MORE ! ---------------------------------------------------
 diff_name_pattern_spellings_to_fix <- diff_name_pattern %>%
@@ -154,7 +184,27 @@ diff_name_spellings_merged <- cdcr_facs %>%
 ## remove bad entries
 updated_fac_spellings <- interim_fac_spellings %>%
   bind_rows(diff_name_spellings_merged) %>%
-  filter(Facility.ID %!in% ids_to_rm_from_diff_name_pattern)
+  filter(Facility.ID %!in% ids_to_rm_from_diff_name_pattern) 
 
-write.csv(updated_fac_spellings, "data/fac_spellings.csv", row.names = FALSE, na = "")
-write.csv(updated_fac_info, "data/fac_data.csv", row.names = FALSE, na = "")
+## change clean names 
+fac_spellings_out <- updated_fac_spellings  %>%
+  mutate(County = ifelse(Facility.ID %in% all_cdcr_ids, 
+                         str_remove_all(xwalk_name_clean, "CDCR CCHCS WORKSITE LOCATION |COUNTY"),
+                         NA),
+         County = ifelse(Facility.ID %in% all_cdcr_ids,
+                         str_squish(County),
+                         County)) %>%
+  ## special treatment for ID = 110 needed
+  mutate(xwalk_name_clean = ifelse(Facility.ID %in% all_cdcr_ids,
+                                   glue('CDCR CCHCS WORKSITE - {County} COUNTY'),
+                                   xwalk_name_clean),
+         xwalk_name_clean = ifelse(Facility.ID == 110, "CDCR CCHCS WORKSITE - SOUTHERN REGION", xwalk_name_clean)) %>%
+  select(-County)
+
+fac_spellings_out %>%
+  filter(Facility.ID %in% all_cdcr_ids) %>%
+  View()
+
+# WRITE OUT DATA ---------------------------------------------------
+write.csv(fac_spellings_out, "data/fac_spellings.csv", row.names = FALSE, na = "")
+write.csv(fac_info_out, "data/fac_data.csv", row.names = FALSE, na = "")
