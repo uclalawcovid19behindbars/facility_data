@@ -2275,3 +2275,5 @@
 2746,"Texas","DELTA COUNTY JAIL","county",,,,,,,10,20,"10004378",,"HIFLD","HIFLD","200 WEST BONHAM ST","COOPER","75432",33.374977764027,-95.6899963549763,"DELTA","48119",,
 2747,"Texas","ICE HOTEL AVA BY RAMADA - HOUSE OF TRANQUILITY","immigration",,,,,,,,,,,,,"800 GARDEN STREET","LAREDO","78040",27.522105,-99.503932,,,,"SNA"
 2748,"Texas","ICE LA QUINTA - WYNDHAM","immigration",,,,,,,,,,,,,"25042 IH-10 WEST","SAN ANTONIO","78257",29.674474,-98.633648,,,,"SNA"
+2749,"Montana","WATCH EAST GLENDIVE","state","Medical Facility","Min","Adult","Female",FALSE,,,48,,,,"Public Records","700 LITTLE STREET","GLENDIVE","59330",47.11471381,-104.6905941,"DAWSON COUNTY","00021","http://www.cccscorp.com/programs/watche/",
+2750,"Idaho","SAGUARO CORRECTIONAL CENTER ELOY ARIZONA","state","Prison","Med","Adult","Male",TRUE,"CoreCivic",1226,1926,"10003973",,"Public Records","Public Records","1250 EAST ARICA ROAD","ELOY","85131",32.80930398,-111.5264356,"PINAL","04021","https://www.idoc.idaho.gov/content/locations/prisons/SCC",
